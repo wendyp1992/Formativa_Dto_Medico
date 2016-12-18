@@ -1,0 +1,20 @@
+
+https://github.com/dektrium
+
+	USER: composer require "dektrium/yii2-user:0.9.*@dev"
+		-Instrucciones -> https://github.com/dektrium/yii2-user/blob/master/docs/getting-started.md
+
+	RBAC: composer require dektrium/yii2-rbac:1.0.0-alpha@dev
+		-Instrucciones -> https://github.com/dektrium/yii2-rbac/blob/master/docs/installation.md
+
+http://demos.krajee.com/date-range
+
+	DATARANGE: composer require kartik-v/yii2-date-range "*" (en el caso de que pida fechas entre rango)
+
+	
+
+PARA HACER USO DE REPORTES 
+	composer require --prefer-dist johnitvn/yii2-ajaxcrud "*"
+
+PARA LA AUDITORIA
+composer require --prefer-dist bedezign/yii2-audit:"^1.0"
