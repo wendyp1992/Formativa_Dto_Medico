@@ -1,8 +1,8 @@
-SISTEMA BASE PARA DESARROLLO DE PROYECTOS PHP- PUCESE 
+SISTEMA DEPARTAMENTO MEDICO PUCESE
 
 ===============================
 
-- (SQL) PARA MYSQL Y SQLSERVER
+- (SQL) PARA MYSQL 
 
 - Módulo para enviar correos
 
@@ -14,8 +14,6 @@ SISTEMA BASE PARA DESARROLLO DE PROYECTOS PHP- PUCESE
 
 - Módulo para Exportar GRID
 
-
 ===============================
 
-
-Dev: Departamento de sistemas
+Proyectos de Formativa

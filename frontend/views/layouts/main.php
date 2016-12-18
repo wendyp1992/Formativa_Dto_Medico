@@ -42,22 +42,24 @@ AppAsset::register($this);
                 //$menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
                 $menuItems[] = ['label' => 'Login', 'url' => ['/user/security/login']];
             } else {
-                $menuItems = [
-                    ['label' => 'Inicio', 'url' => ['/site/index']],
-  
-                    //['label' => 'BACKEND', 'url' => '../../backend/web','visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('admin'),],
+                $menuItems[] = [
+                    'label' => Yii::$app->user->identity->username,
+                    'items' => [
+                        [
+                            'label' => 'Perfil de Usuario',
+                            'url' => ['/user/settings/profile'],
+                        ],
+                        [
+                            'label' => 'Ir a Escritorio',
+                            'url' => ['/../../backend/web'],
+                        ],
+                        [
+                            'label' => 'Salir del Sistema',
+                            'url' => ['/user/security/logout'],
+                            'linkOptions' => ['data-method' => 'post']
+                        ],
+                    ],
                 ];
-         $menuItems[] = '<li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">Perfil <b class="caret"></b></a>'
-                               .'<ul id="w4" class="dropdown-menu">'
-                                .'<li><a href="'.Yii::$app->homeUrl.'user/settings/account" tabindex="-1">Mi cuenta</a></li>'
-                        .'<li>'
-                        . Html::beginForm(['/site/logout'], 'post')
-                        . Html::submitButton(
-                                'Salir (' . Yii::$app->user->identity->username . ')', ['class' => 'btn btn-link']
-                        )
-                        . Html::endForm()
-                        . '</li>'
-                        . '</ul>';
             }
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],
@@ -67,11 +69,11 @@ AppAsset::register($this);
             ?>
 
             <div class="container">
-<?=
-Breadcrumbs::widget([
-    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-])
-?>
+                <?=
+                Breadcrumbs::widget([
+                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                ])
+                ?>
                 <?= Alert::widget() ?>
                 <?= $content ?>
             </div>
