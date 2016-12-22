@@ -5,7 +5,6 @@ $params = array_merge(
     require(__DIR__ . '/params.php'),
     require(__DIR__ . '/params-local.php')
 );
-
 return [
     'id' => 'app-backend',
     'name'=>' Control de actividades',
@@ -14,6 +13,9 @@ return [
     'bootstrap' => ['log'],
     'modules' => [
          'rbac' => 'dektrium\rbac\RbacWebModule',
+          'gii' => [
+            'class' => 'yii\gii\Module',
+        ],
     ],
     'components' => [
         'request' => [

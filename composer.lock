@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b7f03bbd004c82eaea85fd3ff3aecad6",
-    "content-hash": "93fcb8c84212be43df94613f83f3280b",
+    "hash": "56e7a7f0431fcedfb140de11aa22db34",
+    "content-hash": "6f6b028ad0e0c81adfa8b60d315b4de1",
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -1607,16 +1607,16 @@
         },
         {
             "name": "yiisoft/yii2-httpclient",
-            "version": "2.0.1",
+            "version": "2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-httpclient.git",
-                "reference": "05056e8f13fdee09c252686cea62f0889ecab8b7"
+                "reference": "2cc58c318da3c7c71bda1cc26bd3ec5a3ac26284"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-httpclient/zipball/05056e8f13fdee09c252686cea62f0889ecab8b7",
-                "reference": "05056e8f13fdee09c252686cea62f0889ecab8b7",
+                "url": "https://api.github.com/repos/yiisoft/yii2-httpclient/zipball/2cc58c318da3c7c71bda1cc26bd3ec5a3ac26284",
+                "reference": "2cc58c318da3c7c71bda1cc26bd3ec5a3ac26284",
                 "shasum": ""
             },
             "require": {
@@ -1650,7 +1650,7 @@
                 "httpclient",
                 "yii2"
             ],
-            "time": "2016-08-04 13:29:03"
+            "time": "2016-10-31 11:29:06"
         },
         {
             "name": "yiisoft/yii2-swiftmailer",
@@ -1795,6 +1795,7 @@
                 "codeception",
                 "yii2"
             ],
+            "abandoned": "codeception/codeception",
             "time": "2016-03-17 03:41:26"
         },
         {

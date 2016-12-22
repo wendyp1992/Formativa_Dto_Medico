@@ -1,4 +1,4 @@
-<?php
+<?php 
 $params = array_merge(
     require(__DIR__ . '/../../common/config/params.php'),
     require(__DIR__ . '/../../common/config/params-local.php'),
@@ -6,10 +6,12 @@ $params = array_merge(
     require(__DIR__ . '/params-local.php')
 );
 
+
 return [
     'id' => 'app-frontend',
-    'name' => 'Examen Final',
+    'name'=>' Control de actividades',
     'basePath' => dirname(__DIR__),
+    'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
@@ -51,6 +53,9 @@ return [
     ],
     'modules' => [
          'rbac' => 'dektrium\rbac\RbacWebModule',
+          'gii' => [
+            'class' => 'yii\gii\Module',
+        ],
     ],
     'params' => $params,
 ];
