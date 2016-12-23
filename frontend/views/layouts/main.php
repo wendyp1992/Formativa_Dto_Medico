@@ -42,6 +42,52 @@ AppAsset::register($this);
                 //$menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
                 $menuItems[] = ['label' => 'Login', 'url' => ['/user/security/login']];
             } else {
+                 $menuItems[] = [
+                    'label' => 'Administracion',
+                    'items' => [
+                        [
+                            'label' => 'Historia Clínica Paciente',
+                            'url' => ['paciente/create'],
+                        ],
+                        [
+                            'label' => 'Historia Clínica Dependiente',
+                            'url' => ['/'],
+                        ],
+                        [
+                            'label' => 'Hoja Evolución',
+                            'url' => ['/'],
+                        ],
+                         [
+                            'label' => 'Agendar Cita',
+                            'url' => ['/'],
+                        ],
+                         [
+                            'label' => 'Inventario de Medicamentos',
+                            'url' => ['/'],
+                        ],
+                        [
+                                'label' => 'Certificado Médico',
+                            'url' => ['/'],
+                        ],
+                    ],
+                ];
+                  $menuItems[] = [
+                    'label' => 'Reportes',
+                    'items' => [
+                        [
+                            'label' => 'Medicamentos en Stock',
+                            'url' => ['/'],
+                        ],
+                        [
+                            'label' => 'Medicamentos por caducar',
+                            'url' => ['/'],
+                        ],
+                        [
+                            'label' => 'Emisión de copia de Certificado',
+                            'url' => ['/'],
+                        ],
+                    ],
+                ];
                 $menuItems[] = [
                     'label' => Yii::$app->user->identity->username,
                     'items' => [
