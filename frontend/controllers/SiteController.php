@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\controllers;
 
 use Yii;
@@ -12,19 +13,20 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
-
+use yii\data\ArrayDataProvider;
+use yii\httpclient\Client;
+use yii\helpers\Json;
 /**
  * Site controller
  */
-class SiteController extends Controller
-{
+class SiteController extends Controller {
+
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
-        'AuditTrailBehavior' => [
+            'AuditTrailBehavior' => [
                 'class' => 'bedezign\yii2\audit\AuditTrailBehavior',
                 // Array with fields to save. You don't need to configure both `allowed` and `ignored`
                 //'allowed' => ['*'],
@@ -65,8 +67,7 @@ class SiteController extends Controller
     /**
      * @inheritdoc
      */
-    public function actions()
-    {
+    public function actions() {
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
@@ -83,9 +84,28 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         return $this->render('index');
+    }
+
+    public function actionHistoria() {
+        $client = new Client(['baseUrl' => 'http://mundogya.com/servicios/frontend/web/']);
+        $response = $client->createRequest()
+                ->setUrl($model->tipo_paciente + "?nummatricula=9817")//toma los datos del controlador estudiantes del servicio que nos estan dando
+                //->setMethod('post')
+                //->setData(['nummatricula'=>9854])busca por matricula, esto sera remplazado por el nombre del campo del formulario
+                ->addHeaders(['content-type' => 'application/json'])
+                ->send();
+        $data = Json::decode($response->content);
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $data,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+        return $this->render('historia', [
+                    'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
@@ -93,8 +113,7 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionLogout()
-    {
+    public function actionLogout() {
         Yii::$app->user->logout();
 
         return $this->goHome();
