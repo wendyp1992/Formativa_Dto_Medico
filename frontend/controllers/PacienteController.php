@@ -58,7 +58,6 @@ class PacienteController extends Controller {
 
     public function actionCreate() {
         $model = new Paciente();
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $client = new Client(['baseUrl' => 'http://mundogya.com/servicios/frontend/web/']);
             $response = $client->createRequest()
