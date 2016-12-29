@@ -60,12 +60,22 @@ class PacienteController extends Controller {
         $model = new Paciente();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $client = new Client(['baseUrl' => 'http://mundogya.com/servicios/frontend/web/']);
-            $response = $client->createRequest()
-                    ->setUrl($model->tipo_paciente.'?nummatricula='.$model->num_matricula)//toma los datos del controlador estudiantes del servicio que nos estan dando
-                    //->setMethod('post')
-                    //->setData(['nummatricula'=>9854])busca por matricula, esto sera remplazado por el nombre del campo del formulario
-                    ->addHeaders(['content-type' => 'application/json'])
-                    ->send();
+
+            if ($model->tipo_paciente === 'estudiantes') {
+                $response = $client->createRequest()
+                        ->setUrl($model->tipo_paciente . '?nummatricula=' . $model->num_matricula)//toma los datos del controlador estudiantes del servicio que nos estan dando
+                        //->setMethod('post')
+                        //->setData(['nummatricula'=>9854])busca por matricula, esto sera remplazado por el nombre del campo del formulario
+                        ->addHeaders(['content-type' => 'application/json'])
+                        ->send();
+            } else {
+                $response = $client->createRequest()
+                        ->setUrl($model->tipo_paciente . '?cedula=' . $model->cedula)//toma los datos del controlador estudiantes del servicio que nos estan dando
+                        //->setMethod('post')
+                        //->setData(['nummatricula'=>9854])busca por matricula, esto sera remplazado por el nombre del campo del formulario
+                        ->addHeaders(['content-type' => 'application/json'])
+                        ->send();
+            }
             $data = Json::decode($response->content);
             $dataProvider = new ArrayDataProvider([
                 'allModels' => $data,
