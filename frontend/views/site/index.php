@@ -5,16 +5,11 @@
 $this->title = 'Home';
 ?>
 <div class="site-index">
-
     <div class="jumbotron">
-        <h1>PUCESE</h1>
-
-        <p class="lead">App Frontend</p>
-
-  
+        <br> <br><br><br><br>
+                <h1>DEPARTAMENTO MÉDICO</h1>
+                <p>Vista Principal </p>
     </div>
-
     <div class="body-content">
-
     </div>
 </div>

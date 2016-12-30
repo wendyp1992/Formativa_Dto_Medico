@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use app\models\HistoriaClinica;
+use app\models\Antecedentes;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -12,13 +13,12 @@ use yii\filters\VerbFilter;
 /**
  * HistoriaClinicaController implements the CRUD actions for HistoriaClinica model.
  */
-class HistoriaClinicaController extends Controller
-{
+class HistoriaClinicaController extends Controller {
+
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -33,14 +33,13 @@ class HistoriaClinicaController extends Controller
      * Lists all HistoriaClinica models.
      * @return mixed
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $dataProvider = new ActiveDataProvider([
             'query' => HistoriaClinica::find(),
         ]);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -49,10 +48,9 @@ class HistoriaClinicaController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
-    {
+    public function actionView($id) {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+                    'model' => $this->findModel($id),
         ]);
     }
 
@@ -61,15 +59,22 @@ class HistoriaClinicaController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
+    public function actionCreate() {
         $model = new HistoriaClinica();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $antecedentes = new Antecedentes();
+        $id_paciente = \app\models\Paciente::findOne(['id_paciente' => $_GET['id_paciente']]);
+        if ($model->load(Yii::$app->request->post()) && $antecedentes->load(Yii::$app->request->post())) {
+            $model->id_paciente = $antecedentes->id_paciente;
+            $model->fecha_regHistoria = date('Y-m-d h:m:s');
+            $model->save();
+            $antecedentes->save();
             return $this->redirect(['view', 'id' => $model->id_paciente]);
         } else {
+            $model->id_paciente = $id_paciente->id_paciente;
+            $antecedentes->id_paciente = $id_paciente->id_paciente;
             return $this->render('create', [
-                'model' => $model,
+                        'model' => $model,
+                        'antecedentes' => $antecedentes,
             ]);
         }
     }
@@ -80,15 +85,16 @@ class HistoriaClinicaController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
+        $antecedentes = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save() && $antecedentes->load(Yii::$app->request->post()) && $antecedentes->save()) {
             return $this->redirect(['view', 'id' => $model->id_paciente]);
         } else {
             return $this->render('update', [
-                'model' => $model,
+                        'model' => $model,
+                        'antecedentes' => $antecedentes,
             ]);
         }
     }
@@ -99,8 +105,7 @@ class HistoriaClinicaController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -113,12 +118,12 @@ class HistoriaClinicaController extends Controller
      * @return HistoriaClinica the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
         if (($model = HistoriaClinica::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }

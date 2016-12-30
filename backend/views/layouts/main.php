@@ -41,14 +41,9 @@ AppAsset::register($this);
             } else {
                 $menuItems = [
                     ['label' => 'Inicio', 'url' => ['/site/index']],
+                                        ['label' => 'Usuarios', 'url' => ['/user/admin/index'], 'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('admin')],
+
                         //['label' => 'FRONTEND', 'url' => '../../frontend/web','visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('admin'),],
-                ];
-                $menuItems[] = [
-                    'label' => 'Administración',
-                    'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('admin'),
-                    'items' => [
-                        ['label' => 'Usuarios', 'url' => ['/user/admin/index'],],
-                    ],
                 ];
 
                 $menuItems[] = [
@@ -57,14 +52,14 @@ AppAsset::register($this);
                     'items' => [
                         ['label' => 'Accesos', 'url' => ['/audit/entry'],],
                         ['label' => 'Acciones', 'url' => ['/audit/trail'],],
-                    //  ['label' => 'Inicio de sesión', 'url' => ['/logs/index'],],
+                      ['label' => 'Inicio de sesión', 'url' => ['/logs/index'],],
                     ],
                 ];
                 $menuItems[] = [
                     'label' => Yii::$app->user->identity->username,
                     'items' => [
                         ['label' => 'Mi Cuenta', 'url' => ['user/settings/account'],],
-                        ['label' => 'Vista', 'url' => ['/../../frontend/web'],],
+                        ['label' => 'Vista Principal', 'url' => ['/../../frontend/web'],],
                         ['label' => 'Salir', 'url' => ['/user/security/logout'], 'linkOptions' => ['data-method' => 'post']],
                     //  ['label' => 'Inicio de sesión', 'url' => ['/logs/index'],],
                     ],

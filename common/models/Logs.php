@@ -11,7 +11,6 @@ use Yii;
  * @property string $usuario
  * @property string $ip
  * @property string $acceso
- * @property string $fecha
  */
 class Logs extends \yii\db\ActiveRecord
 {
@@ -29,8 +28,9 @@ class Logs extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['usuario', 'ip', 'acceso','fecha'], 'required'],
-            [['usuario', 'ip', 'acceso','fecha'], 'string'],
+            [['usuario', 'ip', 'acceso'], 'required'],
+            [['usuario', 'acceso'], 'string', 'max' => 250],
+            [['ip'], 'string', 'max' => 50],
         ];
     }
 
@@ -44,7 +44,6 @@ class Logs extends \yii\db\ActiveRecord
             'usuario' => 'Usuario',
             'ip' => 'Ip',
             'acceso' => 'Acceso',
-            'fecha' => 'Fecha',
         ];
     }
 }

@@ -8,9 +8,9 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\data\ArrayDataProvider;
 use yii\httpclient\Client;
 use yii\helpers\Json;
+use yii\data\ArrayDataProvider;
 
 /**
  * PacienteController implements the CRUD actions for Paciente model.
@@ -56,11 +56,17 @@ class PacienteController extends Controller {
         ]);
     }
 
+    /**
+     * Creates a new Paciente model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
     public function actionCreate() {
         $model = new Paciente();
+       
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $client = new Client(['baseUrl' => 'http://mundogya.com/servicios/frontend/web/']);
-
             if ($model->tipo_paciente === 'estudiantes') {
                 $response = $client->createRequest()
                         ->setUrl($model->tipo_paciente . '?nummatricula=' . $model->num_matricula)//toma los datos del controlador estudiantes del servicio que nos estan dando
@@ -85,7 +91,7 @@ class PacienteController extends Controller {
             ]);
             return $this->render('../site/historia', [
                         'dataProvider' => $dataProvider,
-                        'model' => $model,
+                        'id_paciente' => $model->id_paciente,
             ]);
         } else {
             return $this->render('create', [

@@ -17,24 +17,23 @@ use Yii;
  * @property Examen[] $idExamens
  * @property Paciente $idPaciente
  */
-class HistoriaClinica extends \yii\db\ActiveRecord
-{
+class HistoriaClinica extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'historia_clinica';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['fecha_regHistoria'], 'safe'],
             [['id_paciente'], 'required'],
+            [['num_historia'], 'required'],
             [['id_paciente'], 'integer'],
             [['num_historia'], 'string', 'max' => 10],
             [['tipo_sangre'], 'string', 'max' => 5],
@@ -45,8 +44,7 @@ class HistoriaClinica extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'num_historia' => 'Num Historia',
             'tipo_sangre' => 'Tipo Sangre',
@@ -58,32 +56,29 @@ class HistoriaClinica extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAntecedentes()
-    {
+    public function getAntecedentes() {
         return $this->hasOne(Antecedentes::className(), ['id_paciente' => 'id_paciente']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getExamenHistoriaClinicas()
-    {
+    public function getExamenHistoriaClinicas() {
         return $this->hasMany(ExamenHistoriaClinica::className(), ['id_paciente' => 'id_paciente']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdExamens()
-    {
+    public function getIdExamens() {
         return $this->hasMany(Examen::className(), ['idExamen' => 'idExamen'])->viaTable('examen_historia_clinica', ['id_paciente' => 'id_paciente']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdPaciente()
-    {
+    public function getIdPaciente() {
         return $this->hasOne(Paciente::className(), ['id_paciente' => 'id_paciente']);
     }
+
 }

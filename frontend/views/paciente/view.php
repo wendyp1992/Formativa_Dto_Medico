@@ -35,6 +35,5 @@ $this->params['breadcrumbs'][] = $this->title;
             'num_matricula',
         ],
     ]) ?>
-    <p>hola</p>
 
 </div>
