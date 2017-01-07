@@ -45,15 +45,15 @@ AppAsset::register($this);
                     'items' => [
                         [
                             'label' => 'Historia Clínica Paciente',
-                            'url' => ['paciente/create'],
+                            'url' => ['/paciente'],
                         ],
                         [
                             'label' => 'Historia Clínica Dependiente',
-                            'url' => ['/'],
+                            'url' => ['/dependiente'],
                         ],
                         [
                             'label' => 'Hoja Evolución',
-                            'url' => ['/'],
+                            'url' => ['/cita-medica'],
                         ],
                          [
                             'label' => 'Agendar Cita',

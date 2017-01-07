@@ -46,10 +46,10 @@ class HistoriaClinica extends \yii\db\ActiveRecord {
      */
     public function attributeLabels() {
         return [
-            'num_historia' => 'Num Historia',
+            'num_historia' => 'Numero de Historia Clínica',
             'tipo_sangre' => 'Tipo Sangre',
-            'fecha_regHistoria' => 'Fecha Reg Historia',
-            'id_paciente' => 'Id Paciente',
+            'fecha_regHistoria' => 'Fecha de Registro',
+            'id_paciente' => 'Id del Paciente',
         ];
     }
 

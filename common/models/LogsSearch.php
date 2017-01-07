@@ -19,7 +19,7 @@ class LogsSearch extends Logs
     {
         return [
             [['id'], 'integer'],
-            [['usuario', 'ip', 'acceso'], 'safe'],
+            [['usuario', 'ip', 'acceso', 'fecha'], 'safe'],
         ];
     }
 
@@ -43,10 +43,10 @@ class LogsSearch extends Logs
     {
         $query = Logs::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['fecha'=>SORT_DESC]]
+
         ]);
 
         $this->load($params);
@@ -57,14 +57,13 @@ class LogsSearch extends Logs
             return $dataProvider;
         }
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-        ]);
+
 
         $query->andFilterWhere(['like', 'usuario', $this->usuario])
             ->andFilterWhere(['like', 'ip', $this->ip])
-            ->andFilterWhere(['like', 'acceso', $this->acceso]);
+            ->andFilterWhere(['like', 'acceso', $this->acceso])
+            ->andFilterWhere(['like', 'fecha', $this->fecha]);
+           
 
         return $dataProvider;
     }

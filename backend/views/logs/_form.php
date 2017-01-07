@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -12,16 +11,21 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'usuario')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'usuario')->textInput() ?>
 
-    <?= $form->field($model, 'ip')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'ip')->textInput() ?>
 
-    <?= $form->field($model, 'acceso')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'acceso')->textInput() ?>
 
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-    </div>
+    <?= $form->field($model, 'fecha')->textInput() ?>
+
+  
+	<?php if (!Yii::$app->request->isAjax){ ?>
+	  	<div class="form-group">
+	        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+	    </div>
+	<?php } ?>
 
     <?php ActiveForm::end(); ?>
-
+    
 </div>

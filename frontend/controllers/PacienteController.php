@@ -4,10 +4,13 @@ namespace frontend\controllers;
 
 use Yii;
 use app\models\Paciente;
-use yii\data\ActiveDataProvider;
+use app\models\Dependiente;
+use frontend\models\PacienteSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use \yii\web\Response;
+use yii\helpers\Html;
 use yii\httpclient\Client;
 use yii\helpers\Json;
 use yii\data\ArrayDataProvider;
@@ -25,7 +28,8 @@ class PacienteController extends Controller {
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'delete' => ['post'],
+                    'bulk-delete' => ['post'],
                 ],
             ],
         ];
@@ -36,11 +40,11 @@ class PacienteController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Paciente::find(),
-        ]);
+        $searchModel = new PacienteSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+                    'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,
         ]);
     }
@@ -51,83 +55,235 @@ class PacienteController extends Controller {
      * @return mixed
      */
     public function actionView($id) {
-        return $this->render('view', [
+        $request = Yii::$app->request;
+        if ($request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return [
+                'title' => "Paciente #" . $id,
+                'content' => $this->renderAjax('view', [
                     'model' => $this->findModel($id),
-        ]);
+                ]),
+                'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                Html::a('Edit', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+            ];
+        } else {
+            return $this->render('view', [
+                        'model' => $this->findModel($id),
+            ]);
+        }
     }
 
     /**
      * Creates a new Paciente model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * For ajax request will return json object
+     * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate() {
+        $request = Yii::$app->request;
         $model = new Paciente();
-       
+        $modelP = new Paciente();
+        $dependiente = new Dependiente();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $client = new Client(['baseUrl' => 'http://mundogya.com/servicios/frontend/web/']);
-            if ($model->tipo_paciente === 'estudiantes') {
-                $response = $client->createRequest()
-                        ->setUrl($model->tipo_paciente . '?nummatricula=' . $model->num_matricula)//toma los datos del controlador estudiantes del servicio que nos estan dando
-                        //->setMethod('post')
-                        //->setData(['nummatricula'=>9854])busca por matricula, esto sera remplazado por el nombre del campo del formulario
-                        ->addHeaders(['content-type' => 'application/json'])
-                        ->send();
-            } else {
-                $response = $client->createRequest()
-                        ->setUrl($model->tipo_paciente . '?cedula=' . $model->cedula)//toma los datos del controlador estudiantes del servicio que nos estan dando
-                        //->setMethod('post')
-                        //->setData(['nummatricula'=>9854])busca por matricula, esto sera remplazado por el nombre del campo del formulario
-                        ->addHeaders(['content-type' => 'application/json'])
-                        ->send();
-            }
-            $data = Json::decode($response->content);
-            $dataProvider = new ArrayDataProvider([
-                'allModels' => $data,
-                'pagination' => [
-                    'pageSize' => 10,
-                ],
-            ]);
-            return $this->render('../site/historia', [
-                        'dataProvider' => $dataProvider,
-                        'id_paciente' => $model->id_paciente,
-            ]);
-        } else {
-            return $this->render('create', [
+        $dataProvider_busqueda = new ArrayDataProvider([
+            'allModels' => null,
+        ]);
+
+        if ($request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if ($request->isGet) {
+                return [
+                    'title' => "Crear Nuevo Paciente",
+                    'content' => $this->renderAjax('create', [
                         'model' => $model,
-            ]);
+                        'modelP' => $modelP,
+                        'dependiente' => $dependiente,
+                        'dataProvider_busqueda' => $dataProvider_busqueda,
+                ])];
+            } else if ($model->load($request->post()) && $model->save()) {
+                return [
+                    'forceReload' => '#crud-datatable-pjax',
+                    'title' => "Crear Nuevo Paciente",
+                    'content' => '<span class="text-success">Paciente Creado con Éxito</span>',
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::a('Crear Más', ['create'], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+                ];
+            } else {
+                return [
+                    'title' => "Crear Nuevo Paciente",
+                    'content' => $this->renderAjax('create', [
+                        'model' => $model,
+                        'modelP' => $modelP,
+                        'dependiente' => $dependiente,
+                        'dataProvider_busqueda' => $dataProvider_busqueda,
+                    ]),
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+                ];
+            }
+        } else {
+            if ($model->load($request->post()) && $model->save()) {
+                $client = new Client(['baseUrl' => 'http://mundogya.com/servicios/frontend/web/']);
+                if ($model->tipo_paciente == 'Estudiante') {
+                    $response = $client->createRequest()
+                            ->setUrl('estudiantes?nummatricula=' . $model->num_matricula)//toma los datos del controlador estudiantes del servicio que nos estan dando
+                            ->addHeaders(['content-type' => 'application/json'])
+                            ->send();
+                    $data = Json::decode($response->content);
+                    $dataProvider = new ArrayDataProvider([
+                        'allModels' => $data,
+                        'pagination' => [
+                            'pageSize' => 10,
+                        ],
+                    ]);
+
+                    $model->cedula = $dataProvider->allModels[0]['E_cedula'];
+                    $model->save();
+                } else {
+                    $response = $client->createRequest()
+                            ->setUrl('trabajadores?cedula=' . $model->cedula)//toma los datos del controlador estudiantes del servicio que nos estan dando
+                            ->addHeaders(['content-type' => 'application/json'])
+                            ->send();
+                    $data = Json::decode($response->content);
+                    $dataProvider = new ArrayDataProvider([
+                        'allModels' => $data,
+                        'pagination' => [
+                            'pageSize' => 10,
+                        ],
+                    ]);
+
+                    $model->cedula = $dataProvider->allModels[0]['cedula'];
+                    $model->save();
+                }
+                return $this->redirect(['historia-clinica/create', 'id_paciente' => $model->id_paciente]);
+                
+                } else {
+                    if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                        return $this->redirect(['historia-clinica/create', 'id_paciente' => $modelP->id_paciente]);
+                    } else {
+
+                        return $this->render('create', [
+                                    'model' => $model,
+                                    'modelP' => $modelP,
+                                    'dataProvider_busqueda' => $dataProvider_busqueda,
+                                    'dependiente' => $dependiente,
+                        ]);
+                    }
+                }
+            }
         }
-    }
 
     /**
      * Updates an existing Paciente model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * For ajax request will return json object
+     * and for non-ajax request if update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
      */
     public function actionUpdate($id) {
+        $request = Yii::$app->request;
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_paciente]);
-        } else {
-            return $this->render('update', [
+        if ($request->isAjax) {
+            /*
+             *   Process for ajax request
+             */
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if ($request->isGet) {
+                return [
+                    'title' => "Update Paciente #" . $id,
+                    'content' => $this->renderAjax('update', [
                         'model' => $model,
-            ]);
+                    ]),
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
+                ];
+            } else if ($model->load($request->post()) && $model->save()) {
+                return [
+                    'forceReload' => '#crud-datatable-pjax',
+                    'title' => "Paciente #" . $id,
+                    'content' => $this->renderAjax('view', [
+                        'model' => $model,
+                    ]),
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::a('Edit', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+                ];
+            } else {
+                return [
+                    'title' => "Update Paciente #" . $id,
+                    'content' => $this->renderAjax('update', [
+                        'model' => $model,
+                    ]),
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
+                ];
+            }
+        } else {
+            /*
+             *   Process for non-ajax request
+             */
+            if ($model->load($request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id_paciente]);
+            } else {
+                return $this->render('update', [
+                            'model' => $model,
+                ]);
+            }
         }
     }
 
     /**
-     * Deletes an existing Paciente model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Delete an existing Paciente model.
+     * For ajax request will return json object
+     * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
     public function actionDelete($id) {
+        $request = Yii::$app->request;
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        if ($request->isAjax) {
+            /*
+             *   Process for ajax request
+             */
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ['forceClose' => true, 'forceReload' => '#crud-datatable-pjax'];
+        } else {
+            /*
+             *   Process for non-ajax request
+             */
+            return $this->redirect(['index']);
+        }
+    }
+
+    /**
+     * Delete multiple existing Paciente model.
+     * For ajax request will return json object
+     * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionBulkDelete() {
+        $request = Yii::$app->request;
+        $pks = explode(',', $request->post('pks')); // Array or selected records primary keys
+        foreach ($pks as $pk) {
+            $model = $this->findModel($pk);
+            $model->delete();
+        }
+
+        if ($request->isAjax) {
+            /*
+             *   Process for ajax request
+             */
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ['forceClose' => true, 'forceReload' => '#crud-datatable-pjax'];
+        } else {
+            /*
+             *   Process for non-ajax request
+             */
+            return $this->redirect(['index']);
+        }
     }
 
     /**
