@@ -40,7 +40,7 @@ AppAsset::register($this);
                 //$menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
                 $menuItems[] = ['label' => 'Login', 'url' => ['/user/security/login']];
             } else {
-                 $menuItems[] = [
+                $menuItems[] = [
                     'label' => 'Administracion',
                     'items' => [
                         [
@@ -53,23 +53,24 @@ AppAsset::register($this);
                         ],
                         [
                             'label' => 'Hoja Evolución',
-                            'url' => ['/cita-medica'],
+                            'url' => ['/cita-medica/create'],
                         ],
-                         [
+                        [
                             'label' => 'Agendar Cita',
                             'url' => ['/'],
                         ],
-                         [
+                        [
+                            'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('superadmin'),
                             'label' => 'Inventario de Medicamentos',
                             'url' => ['/'],
                         ],
                         [
-                                'label' => 'Certificado Médico',
+                            'label' => 'Certificado Médico',
                             'url' => ['/'],
                         ],
                     ],
                 ];
-                  $menuItems[] = [
+                $menuItems[] = [
                     'label' => 'Reportes',
                     'items' => [
                         [

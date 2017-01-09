@@ -12,14 +12,13 @@ use kartik\date\DatePicker;
 <div class="dependiente-form">
 
 
-    
     <div class="form-group col-md-12">
         <?php $form = ActiveForm::begin(['id' => 'paciente']); ?>
         <?= $form->field($modelP, 'cedula')->textInput(['maxlength' => true, 'id' => 'cedula'])->label('Cedula del Trabajador') ?>
         <?= Html::button('Buscar', ['class' => 'btn btn-primary', 'type' => "submit"]) ?>
         <?php ActiveForm::end(); ?>
     </div>
-<div class="form-group col-md-12">
+    <div class="form-group col-md-12">
         <h3>Responsable</h3>
     </div>
 
@@ -39,7 +38,7 @@ use kartik\date\DatePicker;
     <div class="form-group col-md-7"> 
         <?= $form->field($modelP, 'cedula')->textInput(['maxlength' => true, 'readonly' => true, 'value' => $dataProvider->allModels[0]['CargoInstitucional'] . ' / ' . $dataProvider->allModels[0]['departamento']])->label("Cargo Institucional / Departamento") ?>
     </div>
-<div class="form-group col-md-12">
+    <div class="form-group col-md-12">
         <h3>Paciente Dependiente</h3>
     </div>
 
@@ -47,34 +46,40 @@ use kartik\date\DatePicker;
 
     <?= $form->field($model, 'cedula')->textInput(['maxlength' => true]) ?>
 
-    
+
 
 
     <?= $form->field($model, 'nombres')->textInput(['maxlength' => true])->label('Nombres') ?>
 
     <?= $form->field($model, 'apellidos')->textInput(['maxlength' => true])->label('Apellidos') ?>
 
-    <?= $form->field($model, 'fecha_nac')->widget(kartik\date\DatePicker::classname(), [
-            'options' => ['placeholder' => 'Fecha de nacimiento ...'],
-            'pluginOptions' => [
-                    'autoclose' => true
-            ]
-    ])?>
+    <?=
+    $form->field($model, 'fecha_nac')->widget(kartik\date\DatePicker::classname(), [
+        'options' => ['placeholder' => 'Fecha de nacimiento ...'],
+        'pluginOptions' => [
+            'autoclose' => true,
+            'todayHighlight' => TRUE,
+            'format' => 'yyyy-mm-dd',
+        ]
+    ])
+    ?>
 
-    <?= $form->field($model, 'estado_civil')->dropDownList(['Soltero'=>'Soltero/a','Casado'=>'Casado/a','Viudo'=>'Viudo/a',
-        'Divorciado'=>'Divorciado/a','Union Libre'=>'Unión Libre'],['maxlength' => true])->label('Estado Civil') ?>
+    <?=
+    $form->field($model, 'estado_civil')->dropDownList(['Soltero' => 'Soltero/a', 'Casado' => 'Casado/a', 'Viudo' => 'Viudo/a',
+        'Divorciado' => 'Divorciado/a', 'Union Libre' => 'Unión Libre'], ['maxlength' => true])->label('Estado Civil')
+    ?>
 
     <?= $form->field($model, 'id_paciente')->textInput(['type' => "hidden"])->label('') ?>
     <?= $form->field($model, 'fecha_regDependiente')->textInput(['type' => "hidden", 'value' => date('Y-m-d h:m:s')])->label('') ?>
-    <?= $form->field($model, 'cedula_trab')->textInput(['maxlength' => true, 'type' => "hidden"])->label('') ?>
+<?= $form->field($model, 'cedula_trab')->textInput(['maxlength' => true, 'type' => "hidden"])->label('') ?>
 
 
-    <?php if (!Yii::$app->request->isAjax) { ?>
+        <?php if (!Yii::$app->request->isAjax) { ?>
         <div class="form-group">
-            <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         </div>
     <?php } ?>
 
-    <?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); ?>
 
 </div>

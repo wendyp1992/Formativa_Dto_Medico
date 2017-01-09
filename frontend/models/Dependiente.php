@@ -3,7 +3,6 @@
 namespace app\models;
 
 use Yii;
-
 /**
  * This is the model class for table "dependiente".
  *
@@ -16,25 +15,26 @@ use Yii;
  * @property integer $id_paciente
  * @property string $cedula_trab
  */
-class Dependiente extends \yii\db\ActiveRecord
-{
+class Dependiente extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'dependiente';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
+
         return [
             [['fecha_regDependiente'], 'safe'],
             [['id_paciente', 'cedula_trab'], 'required'],
             [['id_paciente'], 'integer'],
+            ['fecha_nac', 'validarFechaNacimiento'],
+            ['cedula', 'validarCedula'],
             [['cedula', 'cedula_trab'], 'string', 'max' => 10],
             [['nombres', 'apellidos', 'fecha_nac', 'estado_civil'], 'string', 'max' => 40],
         ];
@@ -43,8 +43,7 @@ class Dependiente extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'cedula' => 'Cedula',
             'fecha_regDependiente' => 'Fecha Reg Dependiente',
@@ -56,4 +55,19 @@ class Dependiente extends \yii\db\ActiveRecord
             'cedula_trab' => 'Cedula Trab',
         ];
     }
+
+    public function validarFechaNacimiento($attribute, $params) {
+        if (strtotime($this->fecha_nac) > strtotime($this->fecha_regDependiente)) {
+            $this->addError($attribute, 'Fecha de Nacimiento no válida.');
+        }
+    }
+
+    public function validarCedula($attribute, $params) {
+        include("../../frontend/validadores/php/ValidarIdentificacion.php");
+        $validador = new \ValidarIdentificacion();
+        if (!$validador->validarCedula($this->cedula)) {
+            $this->addError($attribute, 'Numero de Identificación no válida.');
+        }
+    }
+
 }

@@ -7,8 +7,10 @@ use yii\helpers\Html;
 ?>
 <div class="dependiente-update">
 
-    <?= $this->render('_form', [
+    <?=
+    $this->render('_form', [
         'model' => $model,
-    ]) ?>
+    ])
+    ?>
 
 </div>

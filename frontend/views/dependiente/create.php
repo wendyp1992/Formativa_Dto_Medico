@@ -12,6 +12,5 @@ use yii\helpers\Html;
         'model' => $model,
         'modelP' => $modelP,
         'dataProvider'=>$dataProvider,
-       // 'id_paciente'=>$id_paciente,
     ]) ?>
 </div>

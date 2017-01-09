@@ -1,7 +1,5 @@
 <?php
-
 namespace frontend\controllers;
-
 use Yii;
 use app\models\Dependiente;
 use app\models\Paciente;
@@ -14,12 +12,10 @@ use yii\helpers\Html;
 use yii\httpclient\Client;
 use yii\helpers\Json;
 use yii\data\ArrayDataProvider;
-
 /**
  * DependienteController implements the CRUD actions for Dependiente model.
  */
 class DependienteController extends Controller {
-
     /**
      * @inheritdoc
      */
@@ -34,7 +30,6 @@ class DependienteController extends Controller {
             ],
         ];
     }
-
     /**
      * Lists all Dependiente models.
      * @return mixed
@@ -42,13 +37,11 @@ class DependienteController extends Controller {
     public function actionIndex() {
         $searchModel = new DependienteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
         return $this->render('index', [
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,
         ]);
     }
-
     /**
      * Displays a single Dependiente model.
      * @param integer $id
@@ -72,7 +65,6 @@ class DependienteController extends Controller {
             ]);
         }
     }
-
     /**
      * Creates a new Dependiente model.
      * For ajax request will return json object
@@ -86,7 +78,6 @@ class DependienteController extends Controller {
          $dataProvider = new ArrayDataProvider([
             'allModels' => null,
         ]);
-
         if ($request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($request->isGet) {
@@ -136,7 +127,6 @@ class DependienteController extends Controller {
                         'pageSize' => 10,
                     ],
                 ]);
-
                 if ($dataProvider->count != 0) {
                     
                     $paciente->tipo_paciente = 'Dependiente';
@@ -174,7 +164,6 @@ class DependienteController extends Controller {
             }
         }
     }
-
     /**
      * Updates an existing Dependiente model.
      * For ajax request will return json object
@@ -185,7 +174,6 @@ class DependienteController extends Controller {
     public function actionUpdate($id) {
         $request = Yii::$app->request;
         $model = $this->findModel($id);
-
         if ($request->isAjax) {
             /*
              *   Process for ajax request
@@ -233,7 +221,6 @@ class DependienteController extends Controller {
             }
         }
     }
-
     /**
      * Delete an existing Dependiente model.
      * For ajax request will return json object
@@ -244,7 +231,6 @@ class DependienteController extends Controller {
     public function actionDelete($id) {
         $request = Yii::$app->request;
         $this->findModel($id)->delete();
-
         if ($request->isAjax) {
             /*
              *   Process for ajax request
@@ -258,7 +244,6 @@ class DependienteController extends Controller {
             return $this->redirect(['index']);
         }
     }
-
     /**
      * Delete multiple existing Dependiente model.
      * For ajax request will return json object
@@ -273,7 +258,6 @@ class DependienteController extends Controller {
             $model = $this->findModel($pk);
             $model->delete();
         }
-
         if ($request->isAjax) {
             /*
              *   Process for ajax request
@@ -287,7 +271,6 @@ class DependienteController extends Controller {
             return $this->redirect(['index']);
         }
     }
-
     /**
      * Finds the Dependiente model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -302,5 +285,4 @@ class DependienteController extends Controller {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-
 }
