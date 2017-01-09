@@ -11,7 +11,6 @@ use yii\helpers\Html;
     <?= $this->render('_form', [
         'model' => $model,
         'modelP' => $modelP,
-        'dependiente' => $dependiente,
         'dataProvider_busqueda' => $dataProvider_busqueda,
     ]) ?>
 </div>

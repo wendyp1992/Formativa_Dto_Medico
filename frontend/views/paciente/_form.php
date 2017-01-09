@@ -33,7 +33,7 @@ use kartik\select2\Select2;
     <?= $form->field($model, 'fecha_regPaciente')->textInput(['type' => "hidden", 'value' => date('Y-m-d H:i')])->label(" ") ?>
     
     <div class="form-group col-md-12">
-        <?= Html::submitButton($model->isNewRecord ? 'Crear' : 'Crear', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Siguiente' : 'Ok', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 </div>

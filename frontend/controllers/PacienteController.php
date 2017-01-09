@@ -83,7 +83,6 @@ class PacienteController extends Controller {
         $request = Yii::$app->request;
         $model = new Paciente();
         $modelP = new Paciente();
-        $dependiente = new Dependiente();
 
         $dataProvider_busqueda = new ArrayDataProvider([
             'allModels' => null,
@@ -97,7 +96,6 @@ class PacienteController extends Controller {
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
                         'modelP' => $modelP,
-                        'dependiente' => $dependiente,
                         'dataProvider_busqueda' => $dataProvider_busqueda,
                 ])];
             } else if ($model->load($request->post()) && $model->save()) {
@@ -114,7 +112,6 @@ class PacienteController extends Controller {
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
                         'modelP' => $modelP,
-                        'dependiente' => $dependiente,
                         'dataProvider_busqueda' => $dataProvider_busqueda,
                     ]),
                     'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
@@ -156,22 +153,20 @@ class PacienteController extends Controller {
                     $model->save();
                 }
                 return $this->redirect(['historia-clinica/create', 'id_paciente' => $model->id_paciente]);
-                
+            } else {
+                if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                    return $this->redirect(['historia-clinica/create', 'id_paciente' => $modelP->id_paciente]);
                 } else {
-                    if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                        return $this->redirect(['historia-clinica/create', 'id_paciente' => $modelP->id_paciente]);
-                    } else {
 
-                        return $this->render('create', [
-                                    'model' => $model,
-                                    'modelP' => $modelP,
-                                    'dataProvider_busqueda' => $dataProvider_busqueda,
-                                    'dependiente' => $dependiente,
-                        ]);
-                    }
+                    return $this->render('create', [
+                                'model' => $model,
+                                'modelP' => $modelP,
+                                'dataProvider_busqueda' => $dataProvider_busqueda,
+                    ]);
                 }
             }
         }
+    }
 
     /**
      * Updates an existing Paciente model.
@@ -185,18 +180,16 @@ class PacienteController extends Controller {
         $model = $this->findModel($id);
 
         if ($request->isAjax) {
-            /*
-             *   Process for ajax request
-             */
+            /* Process for ajax request */
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($request->isGet) {
                 return [
-                    'title' => "Update Paciente #" . $id,
+                    'title' => "Actualizar Paciente #" . $id,
                     'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                    Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
             } else if ($model->load($request->post()) && $model->save()) {
                 return [
@@ -205,8 +198,8 @@ class PacienteController extends Controller {
                     'content' => $this->renderAjax('view', [
                         'model' => $model,
                     ]),
-                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                    Html::a('Edit', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::a('Editar', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
                 ];
             } else {
                 return [
@@ -214,8 +207,8 @@ class PacienteController extends Controller {
                     'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                    Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
+                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
             }
         } else {
@@ -233,26 +226,22 @@ class PacienteController extends Controller {
     }
 
     /**
-     * Delete an existing Paciente model.
-     * For ajax request will return json object
-     * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
+      ACCION ELIMINAR PACIENTE - HISTORIA CLINICA Y ANTECEDENTES
      */
     public function actionDelete($id) {
         $request = Yii::$app->request;
-        $this->findModel($id)->delete();
-
+        //   $this->foreign('$id')->references('$id')->on('$id')->onDelete('cascade');
+        //$this->findModel($id)->delete();
+        $paciente = $this->findModel($id);
+        $historia = \app\models\HistoriaClinica::findOne($id);
+        $antecedentes = \app\models\Antecedentes::findOne($id);
+        $antecedentes->delete();
+        $historia->delete();
+        $paciente->delete();
         if ($request->isAjax) {
-            /*
-             *   Process for ajax request
-             */
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ['forceClose' => true, 'forceReload' => '#crud-datatable-pjax'];
         } else {
-            /*
-             *   Process for non-ajax request
-             */
             return $this->redirect(['index']);
         }
     }
@@ -269,19 +258,17 @@ class PacienteController extends Controller {
         $pks = explode(',', $request->post('pks')); // Array or selected records primary keys
         foreach ($pks as $pk) {
             $model = $this->findModel($pk);
+            $historia = \app\models\HistoriaClinica::findOne($pk);
+            $antecedentes = \app\models\Antecedentes::findOne($pk);
+            $antecedentes->delete();
+            $historia->delete();
             $model->delete();
         }
-
         if ($request->isAjax) {
-            /*
-             *   Process for ajax request
-             */
+
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ['forceClose' => true, 'forceReload' => '#crud-datatable-pjax'];
         } else {
-            /*
-             *   Process for non-ajax request
-             */
             return $this->redirect(['index']);
         }
     }

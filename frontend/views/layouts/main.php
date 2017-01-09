@@ -34,14 +34,14 @@ AppAsset::register($this);
                 ],
             ]);
             $menuItems = [
-                ['label' => 'Inicio', 'url' => ['/site/index']],
+                ['label' => 'Principal', 'url' => ['/site/index']],
             ];
             if (Yii::$app->user->isGuest) {
                 //$menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
-                $menuItems[] = ['label' => 'Login', 'url' => ['/user/security/login']];
+                $menuItems[] = ['label' => 'Entrar', 'url' => ['/user/security/login']];
             } else {
                 $menuItems[] = [
-                    'label' => 'Administracion',
+                    'label' => 'Administración',
                     'items' => [
                         [
                             'label' => 'Historia Clínica Paciente',
@@ -55,15 +55,16 @@ AppAsset::register($this);
                             'label' => 'Hoja Evolución',
                             'url' => ['/cita-medica/create'],
                         ],
-                        [
-                            'label' => 'Agendar Cita',
-                            'url' => ['/'],
-                        ],
-                        [
-                            'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('superadmin'),
-                            'label' => 'Inventario de Medicamentos',
-                            'url' => ['/'],
-                        ],
+//                        [
+//                            'label' => 'Agendar Cita',
+//                            'url' => ['/'],
+//                        ],
+//                        [
+//                            'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('superadmin'),
+//                            'label' => 'Inventario de Medicamentos',
+//                            'url' => ['/'],
+//                            "readonly" => true
+//                        ],
                         [
                             'label' => 'Certificado Médico',
                             'url' => ['/'],
@@ -73,12 +74,16 @@ AppAsset::register($this);
                 $menuItems[] = [
                     'label' => 'Reportes',
                     'items' => [
+//                        [
+//                            'label' => 'Medicamentos en Stock',
+//                            'url' => ['/'],
+//                        ],
+//                        [
+//                            'label' => 'Medicamentos por caducar',
+//                            'url' => ['/'],
+//                        ],
                         [
-                            'label' => 'Medicamentos en Stock',
-                            'url' => ['/'],
-                        ],
-                        [
-                            'label' => 'Medicamentos por caducar',
+                            'label' => 'Pacientes atendidos mensualmente', //clasificar por estudiantes, trabajadores y dependientes
                             'url' => ['/'],
                         ],
                         [
