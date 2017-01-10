@@ -64,6 +64,7 @@ use kartik\date\DatePicker;
     ])
     ?>
 
+    <!--controlar estado civil-->
     <?=
     $form->field($model, 'estado_civil')->dropDownList(['Soltero' => 'Soltero/a', 'Casado' => 'Casado/a', 'Viudo' => 'Viudo/a',
         'Divorciado' => 'Divorciado/a', 'Union Libre' => 'Unión Libre'], ['maxlength' => true])->label('Estado Civil')

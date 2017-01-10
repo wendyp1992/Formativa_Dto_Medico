@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+
 /**
  * This is the model class for table "dependiente".
  *
@@ -35,6 +36,7 @@ class Dependiente extends \yii\db\ActiveRecord {
             [['id_paciente'], 'integer'],
             ['fecha_nac', 'validarFechaNacimiento'],
             ['cedula', 'validarCedula'],
+            ['estado_civil', 'validarEdad'],
             [['cedula', 'cedula_trab'], 'string', 'max' => 10],
             [['nombres', 'apellidos', 'fecha_nac', 'estado_civil'], 'string', 'max' => 40],
         ];
@@ -67,6 +69,15 @@ class Dependiente extends \yii\db\ActiveRecord {
         $validador = new \ValidarIdentificacion();
         if (!$validador->validarCedula($this->cedula)) {
             $this->addError($attribute, 'Numero de Identificación no válida.');
+        }
+    }
+
+    public function validarEdad($attribute, $params) {
+        include("../../frontend/validadores/php/edad.php");
+        $edad = new \edad();
+
+        if (!$edad->estdoCivil($this->fecha_nac)) {
+            $this->addError($attribute, 'Error');
         }
     }
 

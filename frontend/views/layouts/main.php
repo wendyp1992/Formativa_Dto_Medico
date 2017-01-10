@@ -83,7 +83,8 @@ AppAsset::register($this);
 //                            'url' => ['/'],
 //                        ],
                         [
-                            'label' => 'Pacientes atendidos mensualmente', //clasificar por estudiantes, trabajadores y dependientes
+                            'label' => 'Pacientes atendidos mensualmente',
+                            //clasificar por estudiantes, trabajadores y dependientes y brindarlo por servicio despues
                             'url' => ['/'],
                         ],
                         [

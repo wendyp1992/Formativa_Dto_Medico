@@ -12,7 +12,9 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
-
+use yii\httpclient\Client;
+use yii\helpers\Json;
+use yii\data\ArrayDataProvider;
 /**
  * HistoriaClinicaController implements the CRUD actions for HistoriaClinica model.
  */
@@ -77,12 +79,40 @@ class HistoriaClinicaController extends Controller {
      * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate() {
+     public function actionCreate() {
         $request = Yii::$app->request;
         $model = new HistoriaClinica();
+        $modelP = new Paciente();
         $antecedentes = new Antecedentes();
         $id_paciente = Paciente::findOne(['id_paciente' => $_GET['id_paciente']]);
         $cedula = Paciente::findOne(['id_paciente' => $id_paciente])->cedula;
+        
+        $tipo = Paciente::findOne(['id_paciente' => $_GET['id_paciente']])->tipo_paciente;
+        $client = new Client(['baseUrl' => 'http://mundogya.com/servicios/frontend/web/']);
+        $response = NULL;
+
+
+        if ($tipo == 'Trabajador') {
+            $response = $client->createRequest()
+                    ->setUrl('trabajadores?cedula=' . $cedula)
+                    ->addHeaders(['content-type' => 'application/json'])
+                    ->send();
+        } else {
+            $matricula = Paciente::findOne(['id_paciente' => $id_paciente])->num_matricula;
+            $response = $client->createRequest()
+                    ->setUrl('estudiantes?nummatricula=' . $matricula)
+                    ->addHeaders(['content-type' => 'application/json'])
+                    ->send();
+        }
+
+        $data = Json::decode($response->content);
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $data,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
 
         if ($request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -91,6 +121,7 @@ class HistoriaClinicaController extends Controller {
                     'title' => "Crear Nueva Historia Clinica",
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
+                        'modelP' => $modelP,
                         'antecedentes' => $antecedentes,
                         'cedula' => $cedula,
                     ]),
@@ -110,6 +141,7 @@ class HistoriaClinicaController extends Controller {
                     'title' => "Crear Nueva Historia Clinica",
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
+                        'modelP' => $modelP,
                         'antecedentes' => $antecedentes,
                         'cedula' => $cedula,
                     ]),
@@ -127,7 +159,7 @@ class HistoriaClinicaController extends Controller {
                 $model->save();
                 $antecedentes->save();
 
-                return $this->redirect(['view', 'id' => $model->id_paciente]);
+                return $this->redirect(['/paciente']);
             } else {
                 $model->id_paciente = $id_paciente->id_paciente;
                 $antecedentes->id_paciente = $id_paciente->id_paciente;
@@ -136,10 +168,13 @@ class HistoriaClinicaController extends Controller {
                             'model' => $model,
                             'antecedentes' => $antecedentes,
                             'cedula' => $cedula,
+                            'modelP' => $modelP,
+                            'dataProvider' => $dataProvider,
                 ]);
             }
         }
     }
+
 
     /**
      * Updates an existing HistoriaClinica model.

@@ -79,12 +79,13 @@ class PacienteController extends Controller {
      * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate() {
+      public function actionCreate() {
         $request = Yii::$app->request;
         $model = new Paciente();
         $modelP = new Paciente();
+        $dependiente = new Dependiente();
 
-        $dataProvider_busqueda = new ArrayDataProvider([
+        $dataProvider = new ArrayDataProvider([
             'allModels' => null,
         ]);
 
@@ -96,7 +97,8 @@ class PacienteController extends Controller {
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
                         'modelP' => $modelP,
-                        'dataProvider_busqueda' => $dataProvider_busqueda,
+                        'dependiente' => $dependiente,
+                        'dataProvider' => $dataProvider,
                 ])];
             } else if ($model->load($request->post()) && $model->save()) {
                 return [
@@ -112,7 +114,8 @@ class PacienteController extends Controller {
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
                         'modelP' => $modelP,
-                        'dataProvider_busqueda' => $dataProvider_busqueda,
+                        'dependiente' => $dependiente,
+                        'dataProvider' => $dataProvider,
                     ]),
                     'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
                     Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
@@ -157,11 +160,11 @@ class PacienteController extends Controller {
                 if ($model->load(Yii::$app->request->post()) && $model->save()) {
                     return $this->redirect(['historia-clinica/create', 'id_paciente' => $modelP->id_paciente]);
                 } else {
-
                     return $this->render('create', [
                                 'model' => $model,
                                 'modelP' => $modelP,
-                                'dataProvider_busqueda' => $dataProvider_busqueda,
+                                'dataProvider' => $dataProvider,
+                                'dependiente' => $dependiente,
                     ]);
                 }
             }
