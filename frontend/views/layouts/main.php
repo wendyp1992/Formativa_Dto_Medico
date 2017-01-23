@@ -1,4 +1,5 @@
 <?php
+
 /* @var $this \yii\web\View */
 /* @var $content string */
 
@@ -34,14 +35,65 @@ AppAsset::register($this);
                 ],
             ]);
             $menuItems = [
-                ['label' => 'Inicio', 'url' => ['/site/index']],
-                    //['label' => 'About', 'url' => ['/site/about']],
-                    //['label' => 'Contact', 'url' => ['/site/contact']],
+                ['label' => 'Principal', 'url' => ['/site/index']],
             ];
             if (Yii::$app->user->isGuest) {
                 //$menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
-                $menuItems[] = ['label' => 'Login', 'url' => ['/user/security/login']];
+                $menuItems[] = ['label' => 'Entrar', 'url' => ['/user/security/login']];
             } else {
+                $menuItems[] = [
+                    'label' => 'Administración',
+                    'items' => [
+                        [
+                            'label' => 'Historia Clínica Paciente',
+                            'url' => ['/paciente'],
+                        ],
+                        [
+                            'label' => 'Historia Clínica Dependiente',
+                            'url' => ['/dependiente'],
+                        ],
+                        [
+                            'label' => 'Hoja Evolución',
+                            'url' => ['/cita-medica/create'],
+                        ],
+//                        [
+//                            'label' => 'Agendar Cita',
+//                            'url' => ['/'],
+//                        ],
+//                        [
+//                            'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('superadmin'),
+//                            'label' => 'Inventario de Medicamentos',
+//                            'url' => ['/'],
+//                            "readonly" => true
+//                        ],
+                        [
+                            'label' => 'Certificado Médico',
+                            'url' => ['/'],
+                        ],
+                    ],
+                ];
+                $menuItems[] = [
+                    'label' => 'Reportes',
+                    'items' => [
+//                        [
+//                            'label' => 'Medicamentos en Stock',
+//                            'url' => ['/'],
+//                        ],
+//                        [
+//                            'label' => 'Medicamentos por caducar',
+//                            'url' => ['/'],
+//                        ],
+                        [
+                            'label' => 'Pacientes atendidos mensualmente',
+                            //clasificar por estudiantes, trabajadores y dependientes y brindarlo por servicio despues
+                            'url' => ['/'],
+                        ],
+                        [
+                            'label' => 'Emisión de copia de Certificado',
+                            'url' => ['/'],
+                        ],
+                    ],
+                ];
                 $menuItems[] = [
                     'label' => Yii::$app->user->identity->username,
                     'items' => [

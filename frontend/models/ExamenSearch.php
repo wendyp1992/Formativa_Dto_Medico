@@ -5,12 +5,12 @@ namespace frontend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Paciente;
+use app\models\Examen;
 
 /**
- * PacienteSearch represents the model behind the search form about `app\models\Paciente`.
+ * ExamenSearch represents the model behind the search form about `app\models\Examen`.
  */
-class PacienteSearch extends Paciente
+class ExamenSearch extends Examen
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class PacienteSearch extends Paciente
     public function rules()
     {
         return [
-            [['id_paciente'], 'integer'],
-            [['cedula', 'tipo_paciente', 'fecha_regPaciente', 'num_matricula'], 'safe'],
+            [['idExamen'], 'integer'],
+            [['categoria', 'nom_examen'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class PacienteSearch extends Paciente
      */
     public function search($params)
     {
-        $query = Paciente::find();
+        $query = Examen::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -56,13 +56,11 @@ class PacienteSearch extends Paciente
         }
 
         $query->andFilterWhere([
-            'id_paciente' => $this->id_paciente,
-            'fecha_regPaciente' => $this->fecha_regPaciente,
+            'idExamen' => $this->idExamen,
         ]);
 
-        $query->andFilterWhere(['like', 'cedula', $this->cedula])
-            ->andFilterWhere(['like', 'tipo_paciente', $this->tipo_paciente])
-            ->andFilterWhere(['like', 'num_matricula', $this->num_matricula]);
+        $query->andFilterWhere(['like', 'categoria', $this->categoria])
+            ->andFilterWhere(['like', 'nom_examen', $this->nom_examen]);
 
         return $dataProvider;
     }

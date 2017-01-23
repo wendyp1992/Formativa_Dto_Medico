@@ -34,7 +34,7 @@ class Paciente extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            //[['tipo_paciente'], 'required'],
+            [['tipo_paciente'], 'required'],
             [['fecha_regPaciente'], 'safe'],
             [['cedula'], 'string', 'max' => 10],
             [['tipo_paciente', 'num_matricula'], 'string', 'max' => 40],

@@ -5,12 +5,12 @@ namespace frontend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Paciente;
+use app\models\Dependiente;
 
 /**
- * PacienteSearch represents the model behind the search form about `app\models\Paciente`.
+ * DependienteSearch represents the model behind the search form about `app\models\Dependiente`.
  */
-class PacienteSearch extends Paciente
+class DependienteSearch extends Dependiente
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class PacienteSearch extends Paciente
     public function rules()
     {
         return [
+            [['cedula', 'fecha_regDependiente', 'nombres', 'apellidos', 'fecha_nac', 'estado_civil', 'cedula_trab'], 'safe'],
             [['id_paciente'], 'integer'],
-            [['cedula', 'tipo_paciente', 'fecha_regPaciente', 'num_matricula'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class PacienteSearch extends Paciente
      */
     public function search($params)
     {
-        $query = Paciente::find();
+        $query = Dependiente::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -56,13 +56,16 @@ class PacienteSearch extends Paciente
         }
 
         $query->andFilterWhere([
+            'fecha_regDependiente' => $this->fecha_regDependiente,
             'id_paciente' => $this->id_paciente,
-            'fecha_regPaciente' => $this->fecha_regPaciente,
         ]);
 
         $query->andFilterWhere(['like', 'cedula', $this->cedula])
-            ->andFilterWhere(['like', 'tipo_paciente', $this->tipo_paciente])
-            ->andFilterWhere(['like', 'num_matricula', $this->num_matricula]);
+            ->andFilterWhere(['like', 'nombres', $this->nombres])
+            ->andFilterWhere(['like', 'apellidos', $this->apellidos])
+            ->andFilterWhere(['like', 'fecha_nac', $this->fecha_nac])
+            ->andFilterWhere(['like', 'estado_civil', $this->estado_civil])
+            ->andFilterWhere(['like', 'cedula_trab', $this->cedula_trab]);
 
         return $dataProvider;
     }

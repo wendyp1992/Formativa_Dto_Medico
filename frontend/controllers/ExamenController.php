@@ -3,8 +3,8 @@
 namespace frontend\controllers;
 
 use Yii;
-use app\models\Paciente;
-use frontend\models\PacienteSearch;
+use app\models\Examen;
+use frontend\models\ExamenSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,9 +12,9 @@ use \yii\web\Response;
 use yii\helpers\Html;
 
 /**
- * PacienteController implements the CRUD actions for Paciente model.
+ * ExamenController implements the CRUD actions for Examen model.
  */
-class PacienteController extends Controller
+class ExamenController extends Controller
 {
     /**
      * @inheritdoc
@@ -33,12 +33,12 @@ class PacienteController extends Controller
     }
 
     /**
-     * Lists all Paciente models.
+     * Lists all Examen models.
      * @return mixed
      */
     public function actionIndex()
     {    
-        $searchModel = new PacienteSearch();
+        $searchModel = new ExamenSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -49,7 +49,7 @@ class PacienteController extends Controller
 
 
     /**
-     * Displays a single Paciente model.
+     * Displays a single Examen model.
      * @param integer $id
      * @return mixed
      */
@@ -59,7 +59,7 @@ class PacienteController extends Controller
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> "Paciente #".$id,
+                    'title'=> "Examen #".$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $this->findModel($id),
                     ]),
@@ -74,7 +74,7 @@ class PacienteController extends Controller
     }
 
     /**
-     * Creates a new Paciente model.
+     * Creates a new Examen model.
      * For ajax request will return json object
      * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
@@ -82,7 +82,7 @@ class PacienteController extends Controller
     public function actionCreate()
     {
         $request = Yii::$app->request;
-        $model = new Paciente();  
+        $model = new Examen();  
 
         if($request->isAjax){
             /*
@@ -91,7 +91,7 @@ class PacienteController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Create new Paciente",
+                    'title'=> "Create new Examen",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
@@ -102,15 +102,15 @@ class PacienteController extends Controller
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Create new Paciente",
-                    'content'=>'<span class="text-success">Create Paciente success</span>',
+                    'title'=> "Create new Examen",
+                    'content'=>'<span class="text-success">Create Examen success</span>',
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                             Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
         
                 ];         
             }else{           
                 return [
-                    'title'=> "Create new Paciente",
+                    'title'=> "Create new Examen",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
@@ -124,7 +124,7 @@ class PacienteController extends Controller
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id_paciente]);
+                return $this->redirect(['view', 'id' => $model->idExamen]);
             } else {
                 return $this->render('create', [
                     'model' => $model,
@@ -135,7 +135,7 @@ class PacienteController extends Controller
     }
 
     /**
-     * Updates an existing Paciente model.
+     * Updates an existing Examen model.
      * For ajax request will return json object
      * and for non-ajax request if update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
@@ -153,7 +153,7 @@ class PacienteController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Update Paciente #".$id,
+                    'title'=> "Update Examen #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -163,7 +163,7 @@ class PacienteController extends Controller
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Paciente #".$id,
+                    'title'=> "Examen #".$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $model,
                     ]),
@@ -172,7 +172,7 @@ class PacienteController extends Controller
                 ];    
             }else{
                  return [
-                    'title'=> "Update Paciente #".$id,
+                    'title'=> "Update Examen #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -185,7 +185,7 @@ class PacienteController extends Controller
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id_paciente]);
+                return $this->redirect(['view', 'id' => $model->idExamen]);
             } else {
                 return $this->render('update', [
                     'model' => $model,
@@ -195,7 +195,7 @@ class PacienteController extends Controller
     }
 
     /**
-     * Delete an existing Paciente model.
+     * Delete an existing Examen model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -223,7 +223,7 @@ class PacienteController extends Controller
     }
 
      /**
-     * Delete multiple existing Paciente model.
+     * Delete multiple existing Examen model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -254,15 +254,15 @@ class PacienteController extends Controller
     }
 
     /**
-     * Finds the Paciente model based on its primary key value.
+     * Finds the Examen model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Paciente the loaded model
+     * @return Examen the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Paciente::findOne($id)) !== null) {
+        if (($model = Examen::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
