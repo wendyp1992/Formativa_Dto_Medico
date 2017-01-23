@@ -15,25 +15,29 @@ use Yii;
  * @property string $estado_civil
  * @property integer $id_paciente
  * @property string $cedula_trab
+ *
+ * @property Paciente $cedula0
  */
-class Dependiente extends \yii\db\ActiveRecord {
-
+class Dependiente extends \yii\db\ActiveRecord
+{
     /**
      * @inheritdoc
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'dependiente';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules() {
+     public function rules() {
 
         return [
             [['fecha_regDependiente'], 'safe'],
-            [['id_paciente', 'cedula_trab'], 'required'],
+           // [['id_paciente', 'cedula_trab'], 'required'],
             [['id_paciente'], 'integer'],
+            [['cedula'], 'unique'],
             ['fecha_nac', 'validarFechaNacimiento'],
             ['cedula', 'validarCedula'],
             ['estado_civil', 'validarEdad'],
@@ -80,5 +84,4 @@ class Dependiente extends \yii\db\ActiveRecord {
             $this->addError($attribute, 'Error');
         }
     }
-
 }

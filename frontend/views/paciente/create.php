@@ -10,8 +10,5 @@ use yii\helpers\Html;
 <div class="paciente-create">
     <?= $this->render('_form', [
         'model' => $model,
-        'modelP' => $modelP,
-        'dependiente' => $dependiente,
-        'dataProvider' => $dataProvider,
     ]) ?>
 </div>
