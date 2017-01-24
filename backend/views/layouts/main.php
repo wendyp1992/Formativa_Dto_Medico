@@ -34,39 +34,32 @@ AppAsset::register($this);
                 ],
             ]);
             $menuItems = [
-                ['label' => 'Home', 'url' => ['/site/index']],
+                ['label' => 'Principal', 'url' => ['/site/index']],
             ];
             if (Yii::$app->user->isGuest) {
-                $menuItems[] = ['label' => 'Login', 'url' => ['/user/login']];
+                $menuItems[] = ['label' => 'Entrar', 'url' => ['/user/login']];
             } else {
                 $menuItems = [
-                    ['label' => 'Inicio', 'url' => ['/site/index']],
-                        //['label' => 'FRONTEND', 'url' => '../../frontend/web','visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('admin'),],
-                ];
-                $menuItems[] = [
-                    'label' => 'Administración',
-                    'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('admin'),
-                    'items' => [
-                        ['label' => 'Usuarios', 'url' => ['/user/admin/index'],],
-                    ],
+                    ['label' => 'Principal', 'url' => ['/site/index']],
+                    ['label' => 'Nuevos Doctores', 'url' => ['/user/admin/create'], 'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('superadmin'),],
+                        //permitir borrar los datos de los doctores si no ha creado cita medica
                 ];
 
-                $menuItems[] = [
+               $menuItems[] = [
                     'label' => 'Auditoría',
-                    'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('admin'),
+                    'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('superadmin'),
                     'items' => [
                         ['label' => 'Accesos', 'url' => ['/audit/entry'],],
                         ['label' => 'Acciones', 'url' => ['/audit/trail'],],
-                    //  ['label' => 'Inicio de sesión', 'url' => ['/logs/index'],],
+                        ['label' => 'Inicio de sesión', 'url' => ['/logs/index'],],
                     ],
                 ];
                 $menuItems[] = [
                     'label' => Yii::$app->user->identity->username,
                     'items' => [
                         ['label' => 'Mi Cuenta', 'url' => ['user/settings/account'],],
-                        ['label' => 'Vista', 'url' => ['/../../frontend/web'],],
+                        ['label' => 'Vista Principal', 'url' => ['/../../frontend/web'],],
                         ['label' => 'Salir', 'url' => ['/user/security/logout'], 'linkOptions' => ['data-method' => 'post']],
-                    //  ['label' => 'Inicio de sesión', 'url' => ['/logs/index'],],
                     ],
                 ];
             }
@@ -78,11 +71,11 @@ AppAsset::register($this);
             ?>
 
             <div class="container">
-<?=
-Breadcrumbs::widget([
-    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-])
-?>
+                <?=
+                Breadcrumbs::widget([
+                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                ])
+                ?>
                 <?= Alert::widget() ?>
                 <?= $content ?>
             </div>
@@ -96,7 +89,7 @@ Breadcrumbs::widget([
             </div>
         </footer>
 
-<?php $this->endBody() ?>
+        <?php $this->endBody() ?>
     </body>
 </html>
 <?php $this->endPage() ?>

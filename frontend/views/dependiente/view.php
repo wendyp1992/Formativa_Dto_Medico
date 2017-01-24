@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 use yii\widgets\DetailView;
 
@@ -12,11 +12,12 @@ use yii\widgets\DetailView;
         'attributes' => [
             'cedula',
             'fecha_regDependiente',
-            'id_paciente',
             'nombres',
             'apellidos',
             'fecha_nac',
             'estado_civil',
+            'id_paciente',
+            'cedula_trab',
         ],
     ]) ?>
 

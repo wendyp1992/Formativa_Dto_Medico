@@ -1,5 +1,4 @@
 <?php
-
 /* @var $this \yii\web\View */
 /* @var $content string */
 
@@ -60,12 +59,12 @@ AppAsset::register($this);
 //                            'label' => 'Agendar Cita',
 //                            'url' => ['/'],
 //                        ],
-//                        [
-//                            'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('superadmin'),
-//                            'label' => 'Inventario de Medicamentos',
-//                            'url' => ['/'],
-//                            "readonly" => true
-//                        ],
+                        [
+                            'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('superadmin'),
+                            'label' => 'Inventario de Medicamentos',
+                            'url' => ['/medicamentos'],
+                            "readonly" => true
+                        ],
                         [
                             'label' => 'Certificado Médico',
                             'url' => ['/'],
@@ -86,7 +85,7 @@ AppAsset::register($this);
                         [
                             'label' => 'Pacientes atendidos mensualmente',
                             //clasificar por estudiantes, trabajadores y dependientes y brindarlo por servicio despues
-                            'url' => ['/'],
+                            'url' => ['/site/formreporte1'],
                         ],
                         [
                             'label' => 'Emisión de copia de Certificado',

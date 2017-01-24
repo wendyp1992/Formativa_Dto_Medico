@@ -52,19 +52,19 @@ class Antecedentes extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'hb_alcohol' => 'Hb Alcohol',
-            'hb_tabaco' => 'Hb Tabaco',
-            'hb_malaAliment' => 'Hb Mala Aliment',
-            'hb_vidaSedent' => 'Hb Vida Sedent',
-            'alg_cardiaca' => 'Alg Cardiaca',
-            'alg_respiratoria' => 'Alg Respiratoria',
-            'alg_quirurgica' => 'Alg Quirurgica',
-            'alg_traumatolog' => 'Alg Traumatolog',
-            'cancer' => 'Cancer',
-            'diabetes' => 'Diabetes',
-            'hipertension' => 'Hipertension',
-            'tuberculosis' => 'Tuberculosis',
-            'id_paciente' => 'Id Paciente',
+            'hb_alcohol' => 'Hábito de Alcohol',
+            'hb_tabaco' => 'Hábito de Tabaco',
+            'hb_malaAliment' => 'Hábito de Mala Alimentación',
+            'hb_vidaSedent' => 'Hábito de Vida Sedentaria',
+            'alg_cardiaca' => 'Alergia Cardiaca',
+            'alg_respiratoria' => 'Alergia Respiratoria',
+            'alg_quirurgica' => 'Alergia Quirurgica',
+            'alg_traumatolog' => 'Alergia Traumatolog',
+            'cancer' => '¿Tiene Cancer?',
+            'diabetes' => '¿Tiene Diabetes?',
+            'hipertension' => '¿Tiene Hipertension?',
+            'tuberculosis' => '¿Tiene Tuberculosis?',
+            'id_paciente' => 'Id del Paciente',
         ];
     }
 

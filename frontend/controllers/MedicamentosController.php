@@ -3,25 +3,17 @@
 namespace frontend\controllers;
 
 use Yii;
-use app\models\HistoriaClinica;
-use app\models\Paciente;
-use app\models\Antecedentes;
-use frontend\models\HistoriaClinicaSearch;
+use app\models\Medicamentos;
+use frontend\models\SearchMedicamentos;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
-use yii\httpclient\Client;
-use yii\helpers\Json;
-use yii\data\ArrayDataProvider;
-use app\models\Dependiente;
-
 /**
- * HistoriaClinicaController implements the CRUD actions for HistoriaClinica model.
+ * MedicamentosController implements the CRUD actions for Medicamentos model.
  */
-class HistoriaClinicaController extends Controller {
-
+class MedicamentosController extends Controller {
     /**
      * @inheritdoc
      */
@@ -47,11 +39,11 @@ class HistoriaClinicaController extends Controller {
     }
 
     /**
-     * Lists all HistoriaClinica models.
+     * Lists all Medicamentos models.
      * @return mixed
      */
     public function actionIndex() {
-        $searchModel = new HistoriaClinicaSearch();
+        $searchModel = new SearchMedicamentos();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -61,7 +53,7 @@ class HistoriaClinicaController extends Controller {
     }
 
     /**
-     * Displays a single HistoriaClinica model.
+     * Displays a single Medicamentos model.
      * @param integer $id
      * @return mixed
      */
@@ -70,7 +62,7 @@ class HistoriaClinicaController extends Controller {
         if ($request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                'title' => "HistoriaClinica #" . $id,
+                'title' => "Medicamentos #" . $id,
                 'content' => $this->renderAjax('view', [
                     'model' => $this->findModel($id),
                 ]),
@@ -85,115 +77,63 @@ class HistoriaClinicaController extends Controller {
     }
 
     /**
-     * Creates a new HistoriaClinica model.
+     * Creates a new Medicamentos model.
      * For ajax request will return json object
      * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate() {
         $request = Yii::$app->request;
-        $model = new HistoriaClinica();
-        $modelP = new Paciente();
-        $antecedentes = new Antecedentes();
-        $id_paciente = Paciente::findOne(['id_paciente' => $_GET['id_paciente']]);
-        $cedula = Paciente::findOne(['id_paciente' => $id_paciente])->cedula;
-        $tipo = Paciente::findOne(['id_paciente' => $_GET['id_paciente']])->tipo_paciente;
-        $client = new Client(['baseUrl' => 'http://mundogya.com/servicios/frontend/web/']);
-        $response = NULL;
-
-        if ($tipo == 'Trabajador') {
-            $response = $client->createRequest()
-                    ->setUrl('trabajadores?cedula=' . $cedula)
-                    ->addHeaders(['content-type' => 'application/json'])
-                    ->send();
-            $data = Json::decode($response->content);
-            $dataProvider = new ArrayDataProvider([
-                'allModels' => $data,
-                'pagination' => [
-                    'pageSize' => 10,
-                ],
-            ]);
-        } else if ($tipo == 'Estudiante') {
-            $matricula = Paciente::findOne(['id_paciente' => $id_paciente])->num_matricula;
-            $response = $client->createRequest()
-                    ->setUrl('estudiantes?nummatricula=' . $matricula)
-                    ->addHeaders(['content-type' => 'application/json'])
-                    ->send();
-
-            $data = Json::decode($response->content);
-            $dataProvider = new ArrayDataProvider([
-                'allModels' => $data,
-                'pagination' => [
-                    'pageSize' => 10,
-                ],
-            ]);
-        } else {
-            $dataProvider = Dependiente::findOne(['id_paciente' => $_GET['id_paciente']]);
-        }
+        $model = new Medicamentos();
 
         if ($request->isAjax) {
+            /*
+             *   Process for ajax request
+             */
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($request->isGet) {
                 return [
-                    'title' => "Crear Nueva Historia Clinica",
+                    'title' => "Create new Medicamentos",
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
-                        'modelP' => $modelP,
-                        'antecedentes' => $antecedentes,
-                        'cedula' => $cedula,
                     ]),
-                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                    Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
-            } else if ($model->load($request->post()) && $antecedentes->load($request->post()) && $model->save()) {
+            } else if ($model->load($request->post()) && $model->save()) {
                 return [
                     'forceReload' => '#crud-datatable-pjax',
-                    'title' => "Crear Nueva Historia Clinica",
-                    'content' => '<span class="text-success">Crear Historia Clinica success</span>',
-                    'footer' => Html::button('Cerrrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                    Html::a('Crear Mas', ['create'], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+                    'title' => "Create new Medicamentos",
+                    'content' => '<span class="text-success">Create Medicamentos success</span>',
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::a('Create More', ['create'], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
                 ];
             } else {
                 return [
-                    'title' => "Crear Nueva Historia Clinica",
+                    'title' => "Create new Medicamentos",
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
-                        'modelP' => $modelP,
-                        'antecedentes' => $antecedentes,
-                        'cedula' => $cedula,
                     ]),
-                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                    Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
             }
         } else {
             /*
              *   Process for non-ajax request
              */
-            if ($model->load($request->post()) && $antecedentes->load($request->post()) && $model->save()) {
-
-                $model->id_paciente = $antecedentes->id_paciente;
-                $model->save();
-                $antecedentes->save();
-
-                return $this->redirect(['/paciente']);
+            if ($model->load($request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id_medicamento]);
             } else {
-                $model->id_paciente = $id_paciente->id_paciente;
-                $antecedentes->id_paciente = $id_paciente->id_paciente;
-
                 return $this->render('create', [
                             'model' => $model,
-                            'antecedentes' => $antecedentes,
-                            'cedula' => $cedula,
-                            'modelP' => $modelP,
-                            'dataProvider' => $dataProvider,
                 ]);
             }
         }
     }
 
     /**
-     * Updates an existing HistoriaClinica model.
+     * Updates an existing Medicamentos model.
      * For ajax request will return json object
      * and for non-ajax request if update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
@@ -210,7 +150,7 @@ class HistoriaClinicaController extends Controller {
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($request->isGet) {
                 return [
-                    'title' => "Update HistoriaClinica #" . $id,
+                    'title' => "Update Medicamentos #" . $id,
                     'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -220,7 +160,7 @@ class HistoriaClinicaController extends Controller {
             } else if ($model->load($request->post()) && $model->save()) {
                 return [
                     'forceReload' => '#crud-datatable-pjax',
-                    'title' => "HistoriaClinica #" . $id,
+                    'title' => "Medicamentos #" . $id,
                     'content' => $this->renderAjax('view', [
                         'model' => $model,
                     ]),
@@ -229,7 +169,7 @@ class HistoriaClinicaController extends Controller {
                 ];
             } else {
                 return [
-                    'title' => "Update HistoriaClinica #" . $id,
+                    'title' => "Update Medicamentos #" . $id,
                     'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -242,7 +182,7 @@ class HistoriaClinicaController extends Controller {
              *   Process for non-ajax request
              */
             if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id_paciente]);
+                return $this->redirect(['view', 'id' => $model->id_medicamento]);
             } else {
                 return $this->render('update', [
                             'model' => $model,
@@ -252,7 +192,7 @@ class HistoriaClinicaController extends Controller {
     }
 
     /**
-     * Delete an existing HistoriaClinica model.
+     * Delete an existing Medicamentos model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -277,7 +217,7 @@ class HistoriaClinicaController extends Controller {
     }
 
     /**
-     * Delete multiple existing HistoriaClinica model.
+     * Delete multiple existing Medicamentos model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -306,14 +246,14 @@ class HistoriaClinicaController extends Controller {
     }
 
     /**
-     * Finds the HistoriaClinica model based on its primary key value.
+     * Finds the Medicamentos model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return HistoriaClinica the loaded model
+     * @return Medicamentos the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = HistoriaClinica::findOne($id)) !== null) {
+        if (($model = Medicamentos::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

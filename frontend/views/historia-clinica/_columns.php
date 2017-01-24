@@ -12,23 +12,19 @@ return [
     ],
         [
         'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'num_historia',
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'tipo_sangre',
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'fecha_regHistoria',
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'id_paciente',
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'cedula',
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'tipo_paciente',
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'fecha_regPaciente',
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'num_matricula',
     ],
     [
         'class' => 'kartik\grid\ActionColumn',
@@ -37,14 +33,14 @@ return [
         'urlCreator' => function($action, $model, $key, $index) { 
                 return Url::to([$action,'id'=>$key]);
         },
-        'viewOptions'=>['role'=>'modal-remote','title'=>'Ver','data-toggle'=>'tooltip'],
-        'updateOptions'=>['role'=>'modal-remote','title'=>'Editar', 'data-toggle'=>'tooltip'],
-        'deleteOptions'=>['role'=>'modal-remote','title'=>'Borrar', 
+        'viewOptions'=>['role'=>'modal-remote','title'=>'View','data-toggle'=>'tooltip'],
+        'updateOptions'=>['role'=>'modal-remote','title'=>'Update', 'data-toggle'=>'tooltip'],
+        'deleteOptions'=>['role'=>'modal-remote','title'=>'Delete', 
                           'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                           'data-request-method'=>'post',
                           'data-toggle'=>'tooltip',
-                          'data-confirm-title'=>'Está seguro?',
-                          'data-confirm-message'=>'¿Está usted seguro de que quiere borrar este Paciente?'], 
+                          'data-confirm-title'=>'Are you sure?',
+                          'data-confirm-message'=>'Are you sure want to delete this item'], 
     ],
 
 ];   

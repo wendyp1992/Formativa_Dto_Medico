@@ -15,7 +15,6 @@ use Yii;
  *
  * @property CitaAgendada[] $citaAgendadas
  * @property CitaMedica[] $citaMedicas
- * @property Dependiente[] $dependientes
  * @property HistoriaClinica $historiaClinica
  */
 class Paciente extends \yii\db\ActiveRecord
@@ -34,12 +33,9 @@ class Paciente extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tipo_paciente'], 'required'],
             [['fecha_regPaciente'], 'safe'],
             [['cedula'], 'string', 'max' => 10],
             [['tipo_paciente', 'num_matricula'], 'string', 'max' => 40],
-            [['cedula'], 'unique'],
-            [['num_matricula'], 'unique'],
         ];
     }
 
@@ -71,14 +67,6 @@ class Paciente extends \yii\db\ActiveRecord
     public function getCitaMedicas()
     {
         return $this->hasMany(CitaMedica::className(), ['id_paciente' => 'id_paciente']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDependientes()
-    {
-        return $this->hasMany(Dependiente::className(), ['id_paciente' => 'id_paciente']);
     }
 
     /**

@@ -12,27 +12,43 @@ return [
     ],
         [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'cedula',
+        'attribute'=>'id_doctor',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'fecha_regDependiente',
+        'attribute'=>'id_cita',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'nombres',
+        'attribute'=>'presion_baja',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'apellidos',
+        'attribute'=>'temperatura',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'fecha_nac',
+        'attribute'=>'peso',
     ],
     // [
         // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'estado_civil',
+        // 'attribute'=>'frc_cardiaca',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'revision_fisica',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'sintomas',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'diagnostico_exFisicos',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'diagnostico',
     // ],
     // [
         // 'class'=>'\kartik\grid\DataColumn',
@@ -40,14 +56,22 @@ return [
     // ],
     // [
         // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'cedula_trab',
+        // 'attribute'=>'fecha_cita',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'tratamiento_sm',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'presion_alta',
     // ],
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
         'vAlign'=>'middle',
         'urlCreator' => function($action, $model, $key, $index) { 
-                return Url::to([$action,'id'=>$key]);
+                return Url::to([$action,'id_cita, $id_paciente'=>$key]);
         },
         'viewOptions'=>['role'=>'modal-remote','title'=>'View','data-toggle'=>'tooltip'],
         'updateOptions'=>['role'=>'modal-remote','title'=>'Update', 'data-toggle'=>'tooltip'],
