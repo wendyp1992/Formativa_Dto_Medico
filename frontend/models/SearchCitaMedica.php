@@ -18,7 +18,7 @@ class SearchCitaMedica extends CitaMedica
     public function rules()
     {
         return [
-            [['id_doctor', 'id_cita', 'temperatura', 'peso', 'id_paciente'], 'integer'],
+            [['doctor', 'id_cita', 'temperatura', 'peso', 'id_paciente'], 'integer'],
             [['frc_cardiaca', 'revision_fisica', 'sintomas', 'diagnostico_exFisicos', 'diagnostico', 'fecha_cita', 'tratamiento_sm', 'presion_arterial', 'tipo_atencion'], 'safe'],
         ];
     }
@@ -59,7 +59,7 @@ class SearchCitaMedica extends CitaMedica
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id_doctor' => $this->id_doctor,
+            'doctor' => $this->doctor,
             'id_cita' => $this->id_cita,
             'temperatura' => $this->temperatura,
             'peso' => $this->peso,

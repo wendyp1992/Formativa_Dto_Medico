@@ -7,10 +7,10 @@ use Yii;
 /**
  * This is the model class for table "cita_medica".
  *
- * @property integer $id_doctor
+ * @property string $doctor
  * @property integer $id_cita
- * @property integer $temperatura
- * @property integer $peso
+ * @property double $temperatura
+ * @property double $peso
  * @property string $frc_cardiaca
  * @property string $revision_fisica
  * @property string $sintomas
@@ -42,10 +42,12 @@ class CitaMedica extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_doctor', 'id_paciente'], 'required'],
-            [['id_doctor', 'temperatura', 'peso', 'id_paciente'], 'integer'],
+            [['doctor', 'id_paciente'], 'required'],
+            [['temperatura', 'peso'], 'number'],
             [['revision_fisica', 'sintomas', 'diagnostico_exFisicos', 'diagnostico', 'tratamiento_sm'], 'string'],
+            [['id_paciente'], 'integer'],
             [['fecha_cita'], 'safe'],
+            [['doctor'], 'string', 'max' => 20],
             [['frc_cardiaca', 'tipo_atencion'], 'string', 'max' => 40],
             [['presion_arterial'], 'string', 'max' => 30],
             [['id_paciente'], 'exist', 'skipOnError' => true, 'targetClass' => Paciente::className(), 'targetAttribute' => ['id_paciente' => 'id_paciente']],
@@ -57,8 +59,9 @@ class CitaMedica extends \yii\db\ActiveRecord
      */
     public function attributeLabels()
     {
+        
         return [
-            'id_doctor' => 'Doctor',
+            'doctor' => 'Doctor',
             'id_cita' => 'Id Cita',
             'temperatura' => 'Temperatura º',
             'peso' => 'Peso Kg',

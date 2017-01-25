@@ -101,8 +101,8 @@ class DependienteController extends Controller {
                     'title' => "Create new Dependiente",
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
-                       'modelP' => $modelP,
-                       'dataProvider' => $dataProvider,
+                        'modelP' => $modelP,
+                        'dataProvider' => $dataProvider,
                     ]),
                     'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
                     Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
@@ -148,7 +148,7 @@ class DependienteController extends Controller {
                         $paciente->fecha_regPaciente = date('Y-m-d h:m:s');
                         $model->cedula_trab = $dataProvider->allModels[0]['cedula'];
                         $paciente->save();
-                        $model->save();
+                        //$model->save();
                         $model->id_paciente = $paciente->id_paciente;
                         return $this->render('create', [
                                     'model' => $model,
@@ -165,6 +165,12 @@ class DependienteController extends Controller {
                         </div>
                         <?php
                     }
+                    return $this->render('create', [
+                                'model' => $model,
+                                'modelP' => $modelP,
+                                'paciente' => $paciente,
+                                'dataProvider' => $dataProvider,
+                    ]);
                 } else {
                     if ($model->load($request->post()) && $model->save()) {
                         $paciente = Paciente::findOne(['id_paciente' => $model->id_paciente]);

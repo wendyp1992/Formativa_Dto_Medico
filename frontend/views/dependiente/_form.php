@@ -35,9 +35,6 @@ use kartik\date\DatePicker;
     <div class="form-group col-md-7"> 
         <?= $form->field($modelP, 'cedula')->textInput(['maxlength' => true, 'readonly' => true, 'value' => $dataProvider->allModels[0]['CargoInstitucional'] . ' / ' . $dataProvider->allModels[0]['departamento']])->label("Cargo Institucional / Departamento") ?>
     </div>
-    <div class="form-group col-md-12">
-        <h3>Paciente Dependiente</h3>
-    </div>
 
     <center><b><p class="lead">INFORMACION PERSONAL PACIENTE</p></b></center>
 
