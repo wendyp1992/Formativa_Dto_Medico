@@ -4,7 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use app\models\Antecedentes;
-use yii\data\ActiveDataProvider;
+use frontend\models\SearchAntecedentes;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,15 +20,6 @@ class AntecedentesController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => \yii\filters\AccessControl::className(),
-                'rules' => [
-                    [ //permitir solo a los logueados ver la información
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -44,11 +35,11 @@ class AntecedentesController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Antecedentes::find(),
-        ]);
+        $searchModel = new SearchAntecedentes();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }

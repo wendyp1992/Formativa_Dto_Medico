@@ -12,31 +12,27 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'hb_alcohol')->checkbox() ?>
-
-    <?= $form->field($model, 'hb_tabaco')->checkbox() ?>
-
-    <?= $form->field($model, 'hb_malaAliment')->checkbox() ?>
-
-    <?= $form->field($model, 'hb_vidaSedent')->checkbox() ?>
-
-    <?= $form->field($model, 'alg_cardiaca')->checkbox() ?>
-
-    <?= $form->field($model, 'alg_respiratoria')->checkbox() ?>
-
-    <?= $form->field($model, 'alg_quirurgica')->checkbox() ?>
-
-    <?= $form->field($model, 'alg_traumatolog')->checkbox() ?>
-
-    <?= $form->field($model, 'cancer')->checkbox() ?>
-
-    <?= $form->field($model, 'diabetes')->checkbox() ?>
-
-    <?= $form->field($model, 'hipertension')->checkbox() ?>
-
-    <?= $form->field($model, 'tuberculosis')->checkbox() ?>
-
     <?= $form->field($model, 'id_paciente')->textInput() ?>
+
+    <?= $form->field($model, 'alergica')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'respiratoria')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'traumatologica')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'cardiaca')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'quirurgica')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'familiar_tipo')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'enfermedad_familiar')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'tabaco')->checkbox() ?>
+
+    <?= $form->field($model, 'alcohol')->checkbox() ?>
+
+    <?= $form->field($model, 'alimentacion')->checkbox() ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

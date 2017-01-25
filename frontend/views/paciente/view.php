@@ -6,8 +6,9 @@ use yii\widgets\DetailView;
 /* @var $model app\models\Paciente */
 ?>
 <div class="paciente-view">
- 
-    <?= DetailView::widget([
+
+    <?=
+    DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id_paciente',
@@ -16,6 +17,7 @@ use yii\widgets\DetailView;
             'fecha_regPaciente',
             'num_matricula',
         ],
-    ]) ?>
+    ])
+    ?>
 
 </div>

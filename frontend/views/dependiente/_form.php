@@ -40,27 +40,37 @@ use kartik\date\DatePicker;
     </div>
 
     <center><b><p class="lead">INFORMACION PERSONAL PACIENTE</p></b></center>
-    <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'cedula')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'nombres')->textInput(['maxlength' => true])->label('Nombres') ?>
-    <?= $form->field($model, 'apellidos')->textInput(['maxlength' => true])->label('Apellidos') ?>
-    <?=
-    $form->field($model, 'fecha_nac')->widget(kartik\date\DatePicker::classname(), [
-        'options' => ['placeholder' => 'Fecha de nacimiento ...'],
-        'pluginOptions' => [
-            'autoclose' => true,
-            'todayHighlight' => TRUE,
-            'format' => 'yyyy-mm-dd',
-        ]
-    ])
-    ?>
+    <?php $form = ActiveForm::begin(); ?>
+    <div class="form-group col-md-4"> 
+        <?= $form->field($model, 'cedula')->textInput(['maxlength' => true, 'style' => 'width:300px']) ?>
+    </div>
+    <div class="form-group col-md-4"> 
+        <?= $form->field($model, 'nombres')->textInput(['maxlength' => true, 'style' => 'width:300px'])->label('Nombres') ?>
+    </div>    <div class="form-group col-md-4"> 
+
+        <?= $form->field($model, 'apellidos')->textInput(['maxlength' => true, 'style' => 'width:300px'])->label('Apellidos') ?>
+    </div>
+    <div class="form-group col-md-4"> 
+
+        <?=
+        $form->field($model, 'fecha_nac')->widget(kartik\date\DatePicker::classname(), [
+            'options' => ['placeholder' => 'Fecha de nacimiento ...'],
+            'pluginOptions' => [
+                'autoclose' => true,
+                'todayHighlight' => TRUE,
+                'format' => 'yyyy-mm-dd',
+                'style' => 'width:300px',
+            ]
+        ])
+        ?></div>
 
     <!--controlar estado civil-->
-    <?=
-    $form->field($model, 'estado_civil')->dropDownList(['Soltero' => 'Soltero/a', 'Casado' => 'Casado/a', 'Viudo' => 'Viudo/a',
-        'Divorciado' => 'Divorciado/a', 'Union Libre' => 'Unión Libre'], ['maxlength' => true])->label('Estado Civil')
-    ?>
+    <div class="form-group col-md-4"> 
+        <?=
+        $form->field($model, 'estado_civil')->dropDownList(['Soltero' => 'Soltero/a', 'Casado' => 'Casado/a', 'Viudo' => 'Viudo/a',
+            'Divorciado' => 'Divorciado/a', 'Union Libre' => 'Unión Libre'], ['maxlength' => true])->label('Estado Civil')
+        ?></div>
     <?= $form->field($model, 'id_paciente')->textInput(['type' => "hidden"])->label('') ?>
     <?= $form->field($model, 'fecha_regDependiente')->textInput(['type' => "hidden", 'value' => date('Y-m-d h:m:s')])->label('') ?>
     <?= $form->field($model, 'cedula_trab')->textInput(['maxlength' => true, 'type' => "hidden"])->label('') ?>

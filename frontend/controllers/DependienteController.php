@@ -101,8 +101,8 @@ class DependienteController extends Controller {
                     'title' => "Create new Dependiente",
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
-                        'modelP' => $modelP,
-                        'dataProvider' => $dataProvider,
+                       'modelP' => $modelP,
+                       'dataProvider' => $dataProvider,
                     ]),
                     'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
                     Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
@@ -128,52 +128,62 @@ class DependienteController extends Controller {
                 ];
             }
         } else {
-            if ($modelP->load(Yii::$app->request->post())) {
-                $paciente = new Paciente();
-                $client = new Client(['baseUrl' => 'http://mundogya.com/servicios/frontend/web/']);
-                $response = $client->createRequest()
-                        ->setUrl('trabajadores?cedula=' . $modelP->cedula)//toma los datos del controlador 
-                        ->addHeaders(['content-type' => 'application/json'])
-                        ->send();
-                $data = Json::decode($response->content);
-                $dataProvider = new ArrayDataProvider([
-                    'allModels' => $data,
-                    'pagination' => [
-                        'pageSize' => 10,
-                    ],
-                ]);
-                if ($dataProvider->count != 0) {
-                    $paciente->tipo_paciente = 'Dependiente';
-                    $paciente->fecha_regPaciente = date('Y-m-d h:m:s');
-                    $model->cedula_trab = $dataProvider->allModels[0]['cedula'];
-                    $paciente->save();
-                    $model->save();
-                    $model->id_paciente = $paciente->id_paciente;
-                    return $this->render('create', [
-                                'model' => $model,
-                                'modelP' => $modelP,
-                                'dataProvider' => $dataProvider,
+            try {
+                if ($modelP->load(Yii::$app->request->post())) {
+                    $paciente = new Paciente();
+                    $client = new Client(['baseUrl' => 'http://mundogya.com/servicios/frontend/web/']);
+                    $response = $client->createRequest()
+                            ->setUrl('trabajadores?cedula=' . $modelP->cedula)//toma los datos del controlador 
+                            ->addHeaders(['content-type' => 'application/json'])
+                            ->send();
+                    $data = Json::decode($response->content);
+                    $dataProvider = new ArrayDataProvider([
+                        'allModels' => $data,
+                        'pagination' => [
+                            'pageSize' => 10,
+                        ],
                     ]);
+                    if ($dataProvider->count != 0) {
+                        $paciente->tipo_paciente = 'Dependiente';
+                        $paciente->fecha_regPaciente = date('Y-m-d h:m:s');
+                        $model->cedula_trab = $dataProvider->allModels[0]['cedula'];
+                        $paciente->save();
+                        $model->save();
+                        $model->id_paciente = $paciente->id_paciente;
+                        return $this->render('create', [
+                                    'model' => $model,
+                                    'modelP' => $modelP,
+                                    'dataProvider' => $dataProvider,
+                        ]);
+                    } else {
+                        $model->delete();
+                        $modelP->delete();
+                        $paciente->delete();
+                        ?>
+                        <div class = "alert alert-danger">
+                            <strong>Error! Datos del Responsables no encontrados</strong> .Verifique la cedula ingresada
+                        </div>
+                        <?php
+                    }
                 } else {
-                    ?>
-                    <div class = "alert alert-danger">
-                        <strong>Danger!</strong> Indicates a dangerous or potentially negative action.
-                    </div>
-                    <?php
+                    if ($model->load($request->post()) && $model->save()) {
+                        $paciente = Paciente::findOne(['id_paciente' => $model->id_paciente]);
+                        $paciente->cedula = $model->cedula;
+                        $paciente->save();
+                        return $this->redirect(['historia-clinica/create', 'id_paciente' => $model->id_paciente]);
+                    } else {
+                        return $this->render('create', [
+                                    'model' => $model,
+                                    'modelP' => $modelP,
+                                    'dataProvider' => $dataProvider,
+                        ]);
+                    }
                 }
-            } else {
-                if ($model->load($request->post()) && $model->save()) {
-                    $paciente = Paciente::findOne(['id_paciente' => $model->id_paciente]);
-                    $paciente->cedula = $model->cedula;
-                    $paciente->save();
-                    return $this->redirect(['historia-clinica/create', 'id_paciente' => $model->id_paciente]);
-                } else {
-                    return $this->render('create', [
-                                'model' => $model,
-                                'modelP' => $modelP,
-                                'dataProvider' => $dataProvider,
-                    ]);
-                }
+            } catch (\yii\base\Exception $e) {
+                $model->delete();
+                $modelP->delete();
+                $paciente->delete();
+                print(" - Error de Comunicación con el Servidor, Verifique la conexión a Internet!\n");
             }
         }
     }

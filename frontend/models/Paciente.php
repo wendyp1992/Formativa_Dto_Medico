@@ -36,6 +36,7 @@ class Paciente extends \yii\db\ActiveRecord
             [['fecha_regPaciente'], 'safe'],
             [['cedula'], 'string', 'max' => 10],
             [['tipo_paciente', 'num_matricula'], 'string', 'max' => 40],
+            [['cedula'], 'unique'],
         ];
     }
 

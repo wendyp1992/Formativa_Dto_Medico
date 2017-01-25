@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="historia-clinica-form">
-    <center><b><p class="lead">HISTORIA CLINICA</p></b></center>
+    <center><h2>HISTORIA CLÍNICA DEL PACIENTE</h2></center>
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
         <div class="col-md-4">
@@ -46,37 +46,57 @@ use yii\widgets\ActiveForm;
             </div>
         <?php endif; ?>
 
-        <div class="col-md-12">
-            <?= $form->field($model, 'tipo_sangre')->dropDownList(['A+' => 'A+', 'A-' => 'A-', 'B+' => 'B+', 'B-' => 'B-', 'AB+' => 'AB+', 'AB-' => 'AB-', 'O+' => 'O+', 'O-' => 'O-']) ?>
-            <?= $form->field($model, 'fecha_regHistoria')->textInput(['type' => "hidden", 'value' => date('Y-m-d H:i')])->label(" ") ?>
-            <h2>Antecedentes</h2>
+        <center><h2>Hábitos</h2></center>
+        <div class="col-md-4">
+            <?= $form->field($antecedentes, 'tabaco')->checkbox() ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($antecedentes, 'alcohol')->checkbox() ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($antecedentes, 'alimentacion')->checkbox() ?>
+        </div>
+        <br><center><h2>Antecedentes Personales</h2></center>
+
+        <div class="col-md-4">
+            <?= $form->field($model, 'tipo_sangre')->dropDownList(['A+' => 'A+', 'A-' => 'A-', 'B+' => 'B+', 'B-' => 'B-', 'AB+' => 'AB+', 'AB-' => 'AB-', 'O+' => 'O+', 'O-' => 'O-'], ['style' => 'width:300px']) ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($antecedentes, 'alergica')->textInput(['maxlength' => true, 'style' => 'width:300px']) ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($antecedentes, 'respiratoria')->textInput(['maxlength' => true, 'style' => 'width:300px']) ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($antecedentes, 'traumatologica')->textInput(['maxlength' => true, 'style' => 'width:300px']) ?>
+        </div>            
+        <div class="col-md-4">
+            <?= $form->field($antecedentes, 'cardiaca')->textInput(['maxlength' => true, 'style' => 'width:300px']) ?>
+        </div>            
+        <div class="col-md-4">
+            <?= $form->field($antecedentes, 'quirurgica')->textInput(['maxlength' => true, 'style' => 'width:300px']) ?>
         </div>
 
-        <div class="col-md-6">
-            <?= $form->field($antecedentes, 'hb_alcohol')->checkbox() ?>
-            <?= $form->field($antecedentes, 'hb_tabaco')->checkbox() ?>
-            <?= $form->field($antecedentes, 'hb_malaAliment')->checkbox() ?>
-            <?= $form->field($antecedentes, 'hb_vidaSedent')->checkbox() ?>
-            <?= $form->field($antecedentes, 'alg_cardiaca')->checkbox() ?>
-            <?= $form->field($antecedentes, 'alg_respiratoria')->checkbox() ?>
+
+        <br> <center><h2>Antecedentes Familiares</h2></center>
+        <div class="col-md-4">
+            <?= $form->field($antecedentes, 'familiar_tipo')->dropDownList(['Ninguna' => 'Ninguna', 'Papa' => 'Papá', 'mama' => 'mamá', 'Hermanos' => 'Hermanos', 'Abuelos' => 'Abuelos',], ['maxlength' => true, 'style' => 'width:300px']) ?>
         </div>
-        <div class="col-md-6">
-            <?= $form->field($antecedentes, 'alg_quirurgica')->checkbox() ?>
-            <?= $form->field($antecedentes, 'alg_traumatolog')->checkbox() ?>
-            <?= $form->field($antecedentes, 'cancer')->checkbox() ?>
-            <?= $form->field($antecedentes, 'diabetes')->checkbox() ?>
-            <?= $form->field($antecedentes, 'hipertension')->checkbox() ?>
-            <?= $form->field($antecedentes, 'tuberculosis')->checkbox() ?>
-            <?= $form->field($antecedentes, 'id_paciente')->textInput(['type' => "hidden",])->label(" ") ?>
+        <div class="col-md-4">
+            <?= $form->field($antecedentes, 'enfermedad_familiar')->dropDownList(['Ninguna' => 'Ninguna', 'Hipertension' => 'Hipertensión', 'Diabetes' => 'Diabetes', 'Cancer' => 'Cáncer', 'Tuberculosis' => 'Tuberculosis'], ['maxlength' => true, 'style' => 'width:300px']) ?>
         </div>
+        <?= $form->field($antecedentes, 'id_paciente')->textInput(['type' => "hidden",])->label(" ") ?>
+    </div>
+
+    <div class="col-md-12">
+        <?= $form->field($model, 'fecha_regHistoria')->textInput(['type' => "hidden", 'value' => date('Y-m-d H:i')])->label(" ") ?>
     </div>
 
 
-
-
     <?php if (!Yii::$app->request->isAjax) { ?>
-        <div class="form-group">
-            <?= Html::submitButton($model->isNewRecord ? 'Crear' : 'Actualizar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <div class="row">
+            <center> <?= Html::submitButton($model->isNewRecord ? 'Guardar' : 'Guardar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+            </center>
         </div>
     <?php } ?>
 

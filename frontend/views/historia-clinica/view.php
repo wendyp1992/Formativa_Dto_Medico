@@ -15,6 +15,6 @@ use yii\widgets\DetailView;
             'fecha_regHistoria',
             'id_paciente',
         ],
-    ]) ?>
+      ]) ?>
 
 </div>

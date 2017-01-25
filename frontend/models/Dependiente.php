@@ -30,8 +30,8 @@ class Dependiente extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
+            [['cedula', 'nombres', 'apellidos', 'id_paciente', 'cedula_trab'], 'required'],
             [['fecha_regDependiente'], 'safe'],
-            [['id_paciente', 'cedula_trab'], 'required'],
             [['id_paciente'], 'integer'],
             ['fecha_nac', 'validarFechaNacimiento'],
             ['cedula', 'validarCedula'],
@@ -51,10 +51,10 @@ class Dependiente extends \yii\db\ActiveRecord {
             'fecha_regDependiente' => 'Fecha Reg Dependiente',
             'nombres' => 'Nombres',
             'apellidos' => 'Apellidos',
-            'fecha_nac' => 'Fecha Nac',
+            'fecha_nac' => 'Fecha Nacimiento',
             'estado_civil' => 'Estado Civil',
             'id_paciente' => 'Id Paciente',
-            'cedula_trab' => 'Cedula Trab',
+            'cedula_trab' => 'Cedula Trabajador',
         ];
     }
 
@@ -71,7 +71,6 @@ class Dependiente extends \yii\db\ActiveRecord {
             $this->addError($attribute, 'Numero de Identificación no válida.');
         }
     }
-
 
     public function validarEdad($attribute, $params) {
         include("../../frontend/validadores/php/edad.php");

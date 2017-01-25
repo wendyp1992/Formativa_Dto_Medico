@@ -28,7 +28,7 @@ class PacienteController extends Controller {
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
                 'rules' => [
-                    [ //permitir solo a los logueados ver la información
+                    [//permitir solo a los logueados ver la información
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -126,48 +126,54 @@ class PacienteController extends Controller {
                 ];
             }
         } else {
-            if ($model->load($request->post()) && $model->save()) {
-                $client = new Client(['baseUrl' => 'http://mundogya.com/servicios/frontend/web/']);
-                if ($model->tipo_paciente == 'Estudiante') {
-                    $response = $client->createRequest()
-                            ->setUrl('estudiantes?nummatricula=' . $model->num_matricula)//toma los datos del controlador estudiantes del servicio que nos estan dando
-                            ->addHeaders(['content-type' => 'application/json'])
-                            ->send();
-                    $data = Json::decode($response->content);
-                    $dataProvider = new ArrayDataProvider([
-                        'allModels' => $data,
-                        'pagination' => [
-                            'pageSize' => 10,
-                        ],
-                    ]);
-                    $model->cedula = $dataProvider->allModels[0]['E_cedula'];
-                    $model->save();
+            try {
+
+                if ($model->load($request->post()) && $model->save()) {
+                    $client = new Client(['baseUrl' => 'http://mundogya.com/servicios/frontend/web/']);
+                    if ($model->tipo_paciente == 'Estudiante') {
+                        $response = $client->createRequest()
+                                ->setUrl('estudiantes?nummatricula=' . $model->num_matricula)//toma los datos del controlador estudiantes del servicio que nos estan dando
+                                ->addHeaders(['content-type' => 'application/json'])
+                                ->send();
+                        $data = Json::decode($response->content);
+                        $dataProvider = new ArrayDataProvider([
+                            'allModels' => $data,
+                            'pagination' => [
+                                'pageSize' => 10,
+                            ],
+                        ]);
+                        $model->cedula = $dataProvider->allModels[0]['E_cedula'];
+                        $model->save();
+                    } else {
+                        $response = $client->createRequest()
+                                ->setUrl('trabajadores?cedula=' . $model->cedula)//toma los datos del controlador estudiantes del servicio que nos estan dando
+                                ->addHeaders(['content-type' => 'application/json'])
+                                ->send();
+                        $data = Json::decode($response->content);
+                        $dataProvider = new ArrayDataProvider([
+                            'allModels' => $data,
+                            'pagination' => [
+                                'pageSize' => 10,
+                            ],
+                        ]);
+                        $model->cedula = $dataProvider->allModels[0]['cedula'];
+                        $model->save();
+                    }
+                    return $this->redirect(['historia-clinica/create', 'id_paciente' => $model->id_paciente]);
                 } else {
-                    $response = $client->createRequest()
-                            ->setUrl('trabajadores?cedula=' . $model->cedula)//toma los datos del controlador estudiantes del servicio que nos estan dando
-                            ->addHeaders(['content-type' => 'application/json'])
-                            ->send();
-                    $data = Json::decode($response->content);
-                    $dataProvider = new ArrayDataProvider([
-                        'allModels' => $data,
-                        'pagination' => [
-                            'pageSize' => 10,
-                        ],
-                    ]);
-                    $model->cedula = $dataProvider->allModels[0]['cedula'];
-                    $model->save();
+                    if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                        return $this->redirect(['historia-clinica/create', 'id_paciente' => $modelP->id_paciente]);
+                    } else {
+                        return $this->render('create', [
+                                    'model' => $model,
+                                    'modelP' => $modelP,
+                                    'dataProvider' => $dataProvider,
+                        ]);
+                    }
                 }
-                return $this->redirect(['historia-clinica/create', 'id_paciente' => $model->id_paciente]);
-            } else {
-                if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                    return $this->redirect(['historia-clinica/create', 'id_paciente' => $modelP->id_paciente]);
-                } else {
-                    return $this->render('create', [
-                                'model' => $model,
-                                'modelP' => $modelP,
-                                'dataProvider' => $dataProvider,
-                    ]);
-                }
+            } catch (\yii\base\Exception $e) {
+                $model->delete();
+                print(" - Error de Comunicación con el Servidor, Verifique la conexión a Internet!\n");
             }
         }
     }
@@ -234,12 +240,13 @@ class PacienteController extends Controller {
      */
     public function actionDelete($id) {
         $request = Yii::$app->request;
-        //   $this->foreign('$id')->references('$id')->on('$id')->onDelete('cascade');
-        //$this->findModel($id)->delete();
         $paciente = $this->findModel($id);
+        if ($paciente->tipo_paciente == 'Dependiente') {
+            $dependiente = \app\models\Dependiente::findOne($id);
+            $dependiente->delete();
+        }
 
         $paciente->delete();
-
         if ($request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ['forceClose' => true, 'forceReload' => '#crud-datatable-pjax'];
@@ -260,7 +267,10 @@ class PacienteController extends Controller {
         $pks = explode(',', $request->post('pks')); // Array or selected records primary keys
         foreach ($pks as $pk) {
             $model = $this->findModel($pk);
-
+            if ($model->tipo_paciente == 'Dependiente') {
+                $dependiente = \app\models\Dependiente::findOne($pk);
+                $dependiente->delete();
+            }
             $model->delete();
         }
         if ($request->isAjax) {

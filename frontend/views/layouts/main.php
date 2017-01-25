@@ -55,6 +55,10 @@ AppAsset::register($this);
                             'label' => 'Hoja Evolución',
                             'url' => ['/cita-medica/create'],
                         ],
+                        [
+                            'label' => 'Emisión de Exámenes',
+                            'url' => ['/examen'],
+                        ],
 //                        [
 //                            'label' => 'Agendar Cita',
 //                            'url' => ['/'],

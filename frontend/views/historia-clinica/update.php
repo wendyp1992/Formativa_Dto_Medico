@@ -7,8 +7,10 @@ use yii\helpers\Html;
 ?>
 <div class="historia-clinica-update">
 
-    <?= $this->render('_form', [
+    <?=
+    $this->render('_form', [
         'model' => $model,
-    ]) ?>
+    ])
+    ?>
 
 </div>
