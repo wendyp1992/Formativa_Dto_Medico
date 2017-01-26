@@ -148,7 +148,7 @@ class DependienteController extends Controller {
                         $paciente->fecha_regPaciente = date('Y-m-d h:m:s');
                         $model->cedula_trab = $dataProvider->allModels[0]['cedula'];
                         $paciente->save();
-                        //$model->save();
+                       // $model->save();
                         $model->id_paciente = $paciente->id_paciente;
                         return $this->render('create', [
                                     'model' => $model,

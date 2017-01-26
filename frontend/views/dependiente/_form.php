@@ -17,60 +17,61 @@ use kartik\date\DatePicker;
         <?= Html::button('Buscar', ['class' => 'btn btn-primary', 'type' => "submit"]) ?>
         <?php ActiveForm::end(); ?>
     </div>
-    <div class="form-group col-md-12">
-        <h3>Responsable</h3>
-    </div>
-    <div class="form-group col-md-2"> 
-        <?= $form->field($modelP, 'id_paciente')->textInput(['readonly' => true, 'value' => $dataProvider->allModels[0]['idTrabajador']])->label('Id') ?>
-    </div>
-    <div class="form-group col-md-5"> 
-        <?= $form->field($modelP, 'cedula')->textInput(['maxlength' => true, 'readonly' => true, 'value' => $dataProvider->allModels[0]['nombres']])->label("Nombres") ?>
-    </div> 
-    <div class="form-group col-md-5"> 
-        <?= $form->field($modelP, 'cedula')->textInput(['maxlength' => true, 'readonly' => true, 'value' => $dataProvider->allModels[0]['apellidos']])->label("Apellidos") ?>
-    </div>
-    <div class="form-group col-md-5"> 
-        <?= $form->field($modelP, 'cedula')->textInput(['maxlength' => true, 'readonly' => true, 'value' => $dataProvider->allModels[0]['cedula']])->label("Cedula") ?>
-    </div> 
-    <div class="form-group col-md-7"> 
-        <?= $form->field($modelP, 'cedula')->textInput(['maxlength' => true, 'readonly' => true, 'value' => $dataProvider->allModels[0]['CargoInstitucional'] . ' / ' . $dataProvider->allModels[0]['departamento']])->label("Cargo Institucional / Departamento") ?>
-    </div>
+    <?php if ($modelP->cedula != null) : ?>
+        <div class="form-group col-md-12">
+            <h3>Responsable</h3>
+        </div>
+        <div class="form-group col-md-2"> 
+            <?= $form->field($modelP, 'id_paciente')->textInput(['readonly' => true, 'value' => $dataProvider->allModels[0]['idTrabajador']])->label('Id') ?>
+        </div>
+        <div class="form-group col-md-5"> 
+            <?= $form->field($modelP, 'cedula')->textInput(['maxlength' => true, 'readonly' => true, 'value' => $dataProvider->allModels[0]['nombres']])->label("Nombres") ?>
+        </div> 
+        <div class="form-group col-md-5"> 
+            <?= $form->field($modelP, 'cedula')->textInput(['maxlength' => true, 'readonly' => true, 'value' => $dataProvider->allModels[0]['apellidos']])->label("Apellidos") ?>
+        </div>
+        <div class="form-group col-md-5"> 
+            <?= $form->field($modelP, 'cedula')->textInput(['maxlength' => true, 'readonly' => true, 'value' => $dataProvider->allModels[0]['cedula']])->label("Cedula") ?>
+        </div> 
+        <div class="form-group col-md-7"> 
+            <?= $form->field($modelP, 'cedula')->textInput(['maxlength' => true, 'readonly' => true, 'value' => $dataProvider->allModels[0]['CargoInstitucional'] . ' / ' . $dataProvider->allModels[0]['departamento']])->label("Cargo Institucional / Departamento") ?>
+        </div>
 
-    <center><b><p class="lead">INFORMACION PERSONAL PACIENTE</p></b></center>
+        <center><b><p class="lead">INFORMACION PERSONAL PACIENTE</p></b></center>
 
-    <?php $form = ActiveForm::begin(); ?>
-    <div class="form-group col-md-4"> 
-        <?= $form->field($model, 'cedula')->textInput(['maxlength' => true, 'style' => 'width:300px']) ?>
-    </div>
-    <div class="form-group col-md-4"> 
-        <?= $form->field($model, 'nombres')->textInput(['maxlength' => true, 'style' => 'width:300px'])->label('Nombres') ?>
-    </div>    <div class="form-group col-md-4"> 
+        <?php $form = ActiveForm::begin(); ?>
+        <div class="form-group col-md-4"> 
+            <?= $form->field($model, 'cedula')->textInput(['maxlength' => true, 'style' => 'width:300px']) ?>
+        </div>
+        <div class="form-group col-md-4"> 
+            <?= $form->field($model, 'nombres')->textInput(['maxlength' => true, 'style' => 'width:300px'])->label('Nombres') ?>
+        </div>    <div class="form-group col-md-4"> 
 
-        <?= $form->field($model, 'apellidos')->textInput(['maxlength' => true, 'style' => 'width:300px'])->label('Apellidos') ?>
-    </div>
-    <div class="form-group col-md-4"> 
+            <?= $form->field($model, 'apellidos')->textInput(['maxlength' => true, 'style' => 'width:300px'])->label('Apellidos') ?>
+        </div>
+        <div class="form-group col-md-4"> 
 
-        <?=
-        $form->field($model, 'fecha_nac')->widget(kartik\date\DatePicker::classname(), [
-            'options' => ['placeholder' => 'Fecha de nacimiento ...'],
-            'pluginOptions' => [
-                'autoclose' => true,
-                'todayHighlight' => TRUE,
-                'format' => 'yyyy-mm-dd',
-                'style' => 'width:300px',
-            ]
-        ])
-        ?></div>
+            <?=
+            $form->field($model, 'fecha_nac')->widget(kartik\date\DatePicker::classname(), [
+                'options' => ['placeholder' => 'Fecha de nacimiento ...'],
+                'pluginOptions' => [
+                    'autoclose' => true,
+                    'todayHighlight' => TRUE,
+                    'format' => 'yyyy-mm-dd',
+                    'style' => 'width:300px',
+                ]
+            ])
+            ?></div>
 
-    <!--controlar estado civil-->
-    <div class="form-group col-md-4"> 
-        <?=
-        $form->field($model, 'estado_civil')->dropDownList(['Soltero' => 'Soltero/a', 'Casado' => 'Casado/a', 'Viudo' => 'Viudo/a',
-            'Divorciado' => 'Divorciado/a', 'Union Libre' => 'Unión Libre'], ['maxlength' => true])->label('Estado Civil')
-        ?></div>
-    <?= $form->field($model, 'id_paciente')->textInput(['type' => "hidden"])->label('') ?>
-    <?= $form->field($model, 'fecha_regDependiente')->textInput(['type' => "hidden", 'value' => date('Y-m-d h:m:s')])->label('') ?>
-    <?= $form->field($model, 'cedula_trab')->textInput(['maxlength' => true, 'type' => "hidden"])->label('') ?>
+        <!--controlar estado civil-->
+        <div class="form-group col-md-4"> 
+            <?=
+            $form->field($model, 'estado_civil')->dropDownList(['Soltero' => 'Soltero/a', 'Casado' => 'Casado/a', 'Viudo' => 'Viudo/a',
+                'Divorciado' => 'Divorciado/a', 'Union Libre' => 'Unión Libre'], ['maxlength' => true])->label('Estado Civil')
+            ?></div>
+        <?= $form->field($model, 'id_paciente')->textInput(['type' => "hidden"])->label('') ?>
+        <?= $form->field($model, 'fecha_regDependiente')->textInput(['type' => "hidden", 'value' => date('Y-m-d h:m:s')])->label('') ?>
+        <?= $form->field($model, 'cedula_trab')->textInput(['maxlength' => true, 'type' => "hidden"])->label('') ?>
 
 
     <?php if (!Yii::$app->request->isAjax) { ?>
@@ -82,3 +83,4 @@ use kartik\date\DatePicker;
     <?php ActiveForm::end(); ?>
 
 </div>
+    <?php endif; ?>

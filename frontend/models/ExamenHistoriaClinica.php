@@ -35,7 +35,7 @@ class ExamenHistoriaClinica extends \yii\db\ActiveRecord
             [['idExamen', 'id_paciente'], 'required'],
             [['idExamen', 'id_paciente'], 'integer'],
             [['indicaciones'], 'string'],
-            [['idExamen'], 'exist', 'skipOnError' => true, 'targetClass' => Examen::className(), 'targetAttribute' => ['idExamen' => 'idExamen']],
+            [['idExamen'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Examen::className(), 'targetAttribute' => ['idExamen' => 'idExamen']],
             [['id_paciente'], 'exist', 'skipOnError' => true, 'targetClass' => HistoriaClinica::className(), 'targetAttribute' => ['id_paciente' => 'id_paciente']],
         ];
     }

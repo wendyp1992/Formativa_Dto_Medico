@@ -41,11 +41,17 @@ AppAsset::register($this);
             } else {
                 $menuItems = [
                     ['label' => 'Principal', 'url' => ['/site/index']],
-                    ['label' => 'Nuevos Doctores', 'url' => ['/user/admin/create'], 'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('superadmin'),],
                         //permitir borrar los datos de los doctores si no ha creado cita medica
                 ];
-
-               $menuItems[] = [
+                $menuItems[] = [
+                    'label' => 'Insertar',
+                    'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('superadmin'),
+                    'items' => [
+                        ['label' => 'Nuevos Doctores', 'url' => ['/user/admin/create'], 'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('superadmin'),],
+                        ['label' => 'Nuevos Exámenes', 'url' => ['/examen'],],
+                    ],
+                ];
+                $menuItems[] = [
                     'label' => 'Auditoría',
                     'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('superadmin'),
                     'items' => [

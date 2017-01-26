@@ -57,7 +57,7 @@ AppAsset::register($this);
                         ],
                         [
                             'label' => 'Emisión de Exámenes',
-                            'url' => ['/examen'],
+                            'url' => ['/examen-historia-clinica'],
                         ],
 //                        [
 //                            'label' => 'Agendar Cita',

@@ -15,10 +15,15 @@ use yii\helpers\ArrayHelper;
     ?>
 
      <?php 
-      echo $form->field($model, 'idExamen')->widget(Select2::className(), [
-            'data' => $model->getExamenes(),
-        ])->label("Examen");
-
+echo $form->field($model, 'idExamen')->widget(Select2::classname(), [
+    'data' => $model->getExamenes(),
+    'options' => ['placeholder' => 'Seleccione examen...', 'multiple' => true],
+    'pluginOptions' => [
+        'tags' => true,
+        'tokenSeparators' => [',', ' '],
+        'maximumInputLength' => 10
+    ],
+])->label("Examen");
      ?>
 
    <?php echo $form->field($model, 'id_paciente')->widget(Select2::className(), [
