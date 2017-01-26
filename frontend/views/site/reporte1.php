@@ -52,18 +52,32 @@ $cont = count($Cita);
                                 'pageSize' => 10,
                             ],
                         ]);
-                    }
-                    ?>
-                    <tr>
-                        <td><?php echo $id ?></td>
-                        <td><?php echo $Datos->cedula ?></td>
-                        <td><?php echo $Datos->tipo_paciente ?></td>
-                        <td><?php echo $dataProvider->allModels[0]['nombres'] ?></td>
-                        <td><?php echo $dataProvider->allModels[0]['apellidos'] ?></td>
-                        <td><?php echo $fecha ?></td>
-                        <td><?php echo $tipoA ?></td>
-                    </tr>
+                        ?>
+                        <tr>
+                            <td><?php echo $id ?></td>
+                            <td><?php echo $Datos->cedula ?></td>
+                            <td><?php echo $Datos->tipo_paciente ?></td>
+                            <td><?php echo $dataProvider->allModels[0]['nombres'] ?></td>
+                            <td><?php echo $dataProvider->allModels[0]['apellidos'] ?></td>
+                            <td><?php echo $fecha ?></td>
+                            <td><?php echo $tipoA ?></td>
+                        </tr>
+                        <?php
+                    } else {
+                        $dependiente = \app\models\Dependiente::findOne(['id_paciente' => $id]);
+                        ?>
+                        <tr>
+                            <td><?php echo $id ?></td>
+                            <td><?php echo $Datos->cedula ?></td>
+                            <td><?php echo $Datos->tipo_paciente ?></td>
+                            <td><?php echo $dependiente->nombres ?></td>
+                            <td><?php echo $dependiente->nombres ?></td>
+                            <td><?php echo $fecha ?></td>
+                            <td><?php echo $tipoA ?></td>
+                        </tr>
+                    <?php } ?>
                 <?php } ?>
+
             </table>
         </div>       
     </div>

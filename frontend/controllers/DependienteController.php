@@ -165,12 +165,6 @@ class DependienteController extends Controller {
                         </div>
                         <?php
                     }
-                    return $this->render('create', [
-                                'model' => $model,
-                                'modelP' => $modelP,
-                                'paciente' => $paciente,
-                                'dataProvider' => $dataProvider,
-                    ]);
                 } else {
                     if ($model->load($request->post()) && $model->save()) {
                         $paciente = Paciente::findOne(['id_paciente' => $model->id_paciente]);
@@ -189,7 +183,11 @@ class DependienteController extends Controller {
                 $model->delete();
                 $modelP->delete();
                 $paciente->delete();
-                print(" - Error de Comunicación con el Servidor, Verifique la conexión a Internet!\n");
+                ?>
+                <div class = "alert alert-danger">
+                    <strong>Error de Comunicación con el Servidor</strong> .Verifique la conexión a Internet
+                </div>
+                <?php
             }
         }
     }

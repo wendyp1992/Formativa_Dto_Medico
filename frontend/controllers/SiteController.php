@@ -79,7 +79,7 @@ class SiteController extends Controller {
 //        exit;
         //http://demos.krajee.com/mpdf
         $pdf = new Pdf([
-            'content' => $this->renderPartial('reporte1',[
+            'content' => $this->renderPartial('reporte1', [
                     'fecha_nac' => \app\models\Dependiente::findOne(['fecha_nac' => $_GET['fecha_nac']]),
         ]),
             // 'mode'=> Pdf::MODE_CORE,

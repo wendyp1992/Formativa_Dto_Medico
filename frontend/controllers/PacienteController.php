@@ -243,7 +243,9 @@ class PacienteController extends Controller {
         $paciente = $this->findModel($id);
         if ($paciente->tipo_paciente == 'Dependiente') {
             $dependiente = \app\models\Dependiente::findOne($id);
-            $dependiente->delete();
+            if ($dependiente != null) {
+                $dependiente->delete();
+            }
         }
 
         $paciente->delete();
@@ -269,7 +271,9 @@ class PacienteController extends Controller {
             $model = $this->findModel($pk);
             if ($model->tipo_paciente == 'Dependiente') {
                 $dependiente = \app\models\Dependiente::findOne($pk);
-                $dependiente->delete();
+                if ($dependiente != null) {
+                    $dependiente->delete();
+                }
             }
             $model->delete();
         }
