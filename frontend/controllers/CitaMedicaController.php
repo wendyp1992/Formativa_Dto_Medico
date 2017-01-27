@@ -72,7 +72,7 @@ class CitaMedicaController extends Controller {
         $model = new CitaMedica();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['/receta-detalle/create', 'id_cita' => $model->id_cita]);
         } else {
             return $this->render('create', [
                         'model' => $model,

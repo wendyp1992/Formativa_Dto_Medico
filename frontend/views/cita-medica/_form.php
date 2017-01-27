@@ -71,7 +71,6 @@ use yii\helpers\ArrayHelper;
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Guardar' : 'Guardar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        <?= Html::button('Siguiente', ['class' => 'btn btn-primary', 'type' => "submit"]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
