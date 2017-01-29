@@ -1,25 +1,19 @@
 <?php
 
-namespace frontend\controllers;
+namespace backend\controllers;
 
 use Yii;
-use app\models\Dependiente;
-use app\models\Paciente;
-use frontend\models\DependienteSearch;
+use common\models\Medicamentos;
+use backend\models\SearchMedicamentos;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
-use yii\httpclient\Client;
-use yii\helpers\Json;
-use yii\data\ArrayDataProvider;
-
 /**
- * DependienteController implements the CRUD actions for Dependiente model.
+ * MedicamentosController implements the CRUD actions for Medicamentos model.
  */
-class DependienteController extends Controller {
-
+class MedicamentosController extends Controller {
     /**
      * @inheritdoc
      */
@@ -45,12 +39,13 @@ class DependienteController extends Controller {
     }
 
     /**
-     * Lists all Dependiente models.
+     * Lists all Medicamentos models.
      * @return mixed
      */
     public function actionIndex() {
-        $searchModel = new DependienteSearch();
+        $searchModel = new SearchMedicamentos();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         return $this->render('index', [
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,
@@ -58,7 +53,7 @@ class DependienteController extends Controller {
     }
 
     /**
-     * Displays a single Dependiente model.
+     * Displays a single Medicamentos model.
      * @param integer $id
      * @return mixed
      */
@@ -67,7 +62,7 @@ class DependienteController extends Controller {
         if ($request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                'title' => "Dependiente #" . $id,
+                'title' => "Medicamentos #" . $id,
                 'content' => $this->renderAjax('view', [
                     'model' => $this->findModel($id),
                 ]),
@@ -82,118 +77,63 @@ class DependienteController extends Controller {
     }
 
     /**
-     * Creates a new Dependiente model.
+     * Creates a new Medicamentos model.
      * For ajax request will return json object
      * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate() {
         $request = Yii::$app->request;
-        $model = new Dependiente();
-        $modelP = new Paciente();
-        $dataProvider = new ArrayDataProvider([
-            'allModels' => null,
-        ]);
+        $model = new Medicamentos();
+
         if ($request->isAjax) {
+            /*
+             *   Process for ajax request
+             */
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($request->isGet) {
                 return [
-                    'title' => "Create new Dependiente",
+                    'title' => "Create new Medicamentos",
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
-                        'modelP' => $modelP,
-                        'dataProvider' => $dataProvider,
                     ]),
-                   // 'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                   // Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
             } else if ($model->load($request->post()) && $model->save()) {
                 return [
                     'forceReload' => '#crud-datatable-pjax',
-                    'title' => "Create new Dependiente",
-                    'content' => '<span class="text-success">Create Dependiente success</span>',
+                    'title' => "Create new Medicamentos",
+                    'content' => '<span class="text-success">Create Medicamentos success</span>',
                     'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
                     Html::a('Create More', ['create'], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
                 ];
             } else {
                 return [
-                    'title' => "Create new Dependiente",
+                    'title' => "Create new Medicamentos",
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
-                        'modelP' => $modelP,
-                        'dataProvider' => $dataProvider,
                     ]),
                     'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
                     Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
             }
         } else {
-            try {
-                if ($modelP->load(Yii::$app->request->post())) {
-                    $paciente = new Paciente();
-                    $client = new Client(['baseUrl' => 'http://mundogya.com/servicios/frontend/web/']);
-                    $response = $client->createRequest()
-                            ->setUrl('trabajadores?cedula=' . $modelP->cedula)//toma los datos del controlador 
-                            ->addHeaders(['content-type' => 'application/json'])
-                            ->send();
-                    $data = Json::decode($response->content);
-                    $dataProvider = new ArrayDataProvider([
-                        'allModels' => $data,
-                        'pagination' => [
-                            'pageSize' => 10,
-                        ],
-                    ]);
-                    if ($dataProvider->count != 0) {
-                        $paciente->tipo_paciente = 'Dependiente';
-                        $paciente->fecha_regPaciente = date('Y-m-d h:m:s');
-                        $model->cedula_trab = $dataProvider->allModels[0]['cedula'];
-                        $paciente->save();
-                       // $model->save();
-                        $model->id_paciente = $paciente->id_paciente;
-                        return $this->render('create', [
-                                    'model' => $model,
-                                    'modelP' => $modelP,
-                                    'dataProvider' => $dataProvider,
-                        ]);
-                    } else {
-                        $model->delete();
-                        $modelP->delete();
-                        $paciente->delete();
-                        ?>
-                        <div class = "alert alert-danger">
-                            <strong>Error! Datos del Responsables no encontrados</strong> .Verifique la cedula ingresada
-                        </div>
-                        <?php
-                    }
-                } else {
-                    if ($model->load($request->post()) && $model->save()) {
-                        $paciente = Paciente::findOne(['id_paciente' => $model->id_paciente]);
-                        $paciente->cedula = $model->cedula;
-                        $paciente->save();
-                        return $this->redirect(['historia-clinica/create', 'id_paciente' => $model->id_paciente]);
-                    } else {
-                        return $this->render('create', [
-                                    'model' => $model,
-                                    'modelP' => $modelP,
-                                    'dataProvider' => $dataProvider,
-                        ]);
-                    }
-                }
-            } catch (\yii\base\Exception $e) {
-                $model->delete();
-                $modelP->delete();
-                $paciente->delete();
-                ?>
-                <div class = "alert alert-danger">
-                    <strong>Error de Comunicación con el Servidor</strong> .Verifique la conexión a Internet
-                </div>
-                <?php
+            /*
+             *   Process for non-ajax request
+             */
+            if ($model->load($request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id_medicamento]);
+            } else {
+                return $this->render('create', [
+                            'model' => $model,
+                ]);
             }
         }
     }
 
     /**
-     * Updates an existing Dependiente model.
+     * Updates an existing Medicamentos model.
      * For ajax request will return json object
      * and for non-ajax request if update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
@@ -202,6 +142,7 @@ class DependienteController extends Controller {
     public function actionUpdate($id) {
         $request = Yii::$app->request;
         $model = $this->findModel($id);
+
         if ($request->isAjax) {
             /*
              *   Process for ajax request
@@ -209,7 +150,7 @@ class DependienteController extends Controller {
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($request->isGet) {
                 return [
-                    'title' => "Update Dependiente #" . $id,
+                    'title' => "Update Medicamentos #" . $id,
                     'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -219,7 +160,7 @@ class DependienteController extends Controller {
             } else if ($model->load($request->post()) && $model->save()) {
                 return [
                     'forceReload' => '#crud-datatable-pjax',
-                    'title' => "Dependiente #" . $id,
+                    'title' => "Medicamentos #" . $id,
                     'content' => $this->renderAjax('view', [
                         'model' => $model,
                     ]),
@@ -228,7 +169,7 @@ class DependienteController extends Controller {
                 ];
             } else {
                 return [
-                    'title' => "Update Dependiente #" . $id,
+                    'title' => "Update Medicamentos #" . $id,
                     'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -241,7 +182,7 @@ class DependienteController extends Controller {
              *   Process for non-ajax request
              */
             if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id_paciente]);
+                return $this->redirect(['view', 'id' => $model->id_medicamento]);
             } else {
                 return $this->render('update', [
                             'model' => $model,
@@ -251,7 +192,7 @@ class DependienteController extends Controller {
     }
 
     /**
-     * Delete an existing Dependiente model.
+     * Delete an existing Medicamentos model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -260,6 +201,7 @@ class DependienteController extends Controller {
     public function actionDelete($id) {
         $request = Yii::$app->request;
         $this->findModel($id)->delete();
+
         if ($request->isAjax) {
             /*
              *   Process for ajax request
@@ -275,7 +217,7 @@ class DependienteController extends Controller {
     }
 
     /**
-     * Delete multiple existing Dependiente model.
+     * Delete multiple existing Medicamentos model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -288,6 +230,7 @@ class DependienteController extends Controller {
             $model = $this->findModel($pk);
             $model->delete();
         }
+
         if ($request->isAjax) {
             /*
              *   Process for ajax request
@@ -303,14 +246,14 @@ class DependienteController extends Controller {
     }
 
     /**
-     * Finds the Dependiente model based on its primary key value.
+     * Finds the Medicamentos model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Dependiente the loaded model
+     * @return Medicamentos the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = Dependiente::findOne($id)) !== null) {
+        if (($model = Medicamentos::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

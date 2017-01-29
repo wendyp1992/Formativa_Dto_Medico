@@ -8,13 +8,16 @@ use yii\data\ArrayDataProvider;
 /* @var $this yii\web\View */
 
 $this->title = 'Reporte1';
-$Cita = Yii::$app->db->createCommand('SELECT id_paciente, fecha_cita, tipo_atencion from cita_medica')->queryAll();
+$Cita = Yii::$app->db->createCommand('SELECT id_paciente, fecha_cita, tipo_atencion from cita_medica WHERE fecha_cita>=" . $id_reporte->fechainicio . " AND fecha_cita<=" . $id_reporte->fechafin . "')->queryAll();
 $cont = count($Cita);
 ?>
 
 <div class="site-index">
     <div class="jumbotron">
         <div class="row">
+            <h1>REPORTE DE PACIENTES ATENDIDOS <?php echo $cont?></h1>
+             <h5>   Desde <?php echo $id_reporte->fechainicio ?> Hasta <?php echo $id_reporte->fechafin ?></h5>
+
             <table>
                 <tr>
                     <td>Id Paciente</td>
@@ -71,7 +74,7 @@ $cont = count($Cita);
                             <td><?php echo $Datos->cedula ?></td>
                             <td><?php echo $Datos->tipo_paciente ?></td>
                             <td><?php echo $dependiente->nombres ?></td>
-                            <td><?php echo $dependiente->nombres ?></td>
+                            <td><?php echo $dependiente->apellidos ?></td>
                             <td><?php echo $fecha ?></td>
                             <td><?php echo $tipoA ?></td>
                         </tr>

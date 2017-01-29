@@ -64,14 +64,8 @@ AppAsset::register($this);
 //                            'url' => ['/'],
 //                        ],
                         [
-                            'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('superadmin'),
-                            'label' => 'Inventario de Medicamentos',
-                            'url' => ['/medicamentos'],
-                            "readonly" => true
-                        ],
-                        [
                             'label' => 'Certificado Médico',
-                            'url' => ['/'],
+                            'url' => ['/certificado-medico/create'],
                         ],
                     ],
                 ];
@@ -87,13 +81,13 @@ AppAsset::register($this);
 //                            'url' => ['/'],
 //                        ],
                         [
-                            'label' => 'Pacientes atendidos mensualmente',
+                            'label' => 'Pacientes atendidos',
                             //clasificar por estudiantes, trabajadores y dependientes y brindarlo por servicio despues
-                            'url' => ['/site/formreporte1'],
+                            'url' => ['/reportepacientes'],
                         ],
                         [
                             'label' => 'Emisión de copia de Certificado',
-                            'url' => ['/'],
+                            'url' => ['/certificado-medico/index'],
                         ],
                     ],
                 ];

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
 use yii\grid\GridView;
-
+use common\models\Medicamentos;
 /* @var $this yii\web\View */
 /* @var $model app\models\RecetaDetalle */
 /* @var $form yii\widgets\ActiveForm */
@@ -18,7 +18,7 @@ use yii\grid\GridView;
         <?=
                 $form->field($model, 'id_medicamento')->
                 widget(Select2::className(), [
-                    'data' => [(\yii\helpers\ArrayHelper::map(app\models\Medicamentos::find()->asArray()->all(), 'id_medicamento', function($model, $defaultValue) {
+                    'data' => [(\yii\helpers\ArrayHelper::map(common\models\Medicamentos::find()->asArray()->all(), 'id_medicamento', function($model, $defaultValue) {
                                     return (empty($model['id_medicamento'])) ? $model['nombre_med'] : $model['nombre_med'];
                                 }))],
                     'options' => ['placeholder' => 'Elegir una opción', 'id' => 'opcion'],

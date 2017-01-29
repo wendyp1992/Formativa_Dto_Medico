@@ -36,7 +36,7 @@ class RecetaDetalle extends \yii\db\ActiveRecord
             [['id_cita', 'id_medicamento', 'cantidad_med'], 'integer'],
             [['indicaciones', 'observacion'], 'string'],
             [['id_cita'], 'exist', 'skipOnError' => true, 'targetClass' => CitaMedica::className(), 'targetAttribute' => ['id_cita' => 'id_cita']],
-            [['id_medicamento'], 'exist', 'skipOnError' => true, 'targetClass' => Medicamentos::className(), 'targetAttribute' => ['id_medicamento' => 'id_medicamento']],
+            [['id_medicamento'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Medicamentos::className(), 'targetAttribute' => ['id_medicamento' => 'id_medicamento']],
         ];
     }
 

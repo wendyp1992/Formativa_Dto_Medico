@@ -49,6 +49,8 @@ AppAsset::register($this);
                     'items' => [
                         ['label' => 'Nuevos Doctores', 'url' => ['/user/admin/create'], 'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('superadmin'),],
                         ['label' => 'Nuevos Exámenes', 'url' => ['/examen'],],
+                        ['label' => 'Nuevos Medicamentos', 'url' => ['/medicamentos'],'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('superadmin'),
+],
                     ],
                 ];
                 $menuItems[] = [
