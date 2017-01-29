@@ -12,6 +12,10 @@ return [
     ],
         [
         'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'IdExamenHistoria',
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'idExamen',
     ],
     [
@@ -19,15 +23,11 @@ return [
         'attribute'=>'id_paciente',
     ],
     [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'indicaciones',
-    ],
-    [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
         'vAlign'=>'middle',
         'urlCreator' => function($action, $model, $key, $index) { 
-                return Url::to([$action,'idExamen, $id_paciente'=>$key]);
+                return Url::to([$action,'id'=>$key]);
         },
         'viewOptions'=>['role'=>'modal-remote','title'=>'View','data-toggle'=>'tooltip'],
         'updateOptions'=>['role'=>'modal-remote','title'=>'Update', 'data-toggle'=>'tooltip'],

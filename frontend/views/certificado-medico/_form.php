@@ -30,26 +30,25 @@ use yii\widgets\ActiveForm;
                     ])
             ?>
 
-           
+
         </div>
         <div class="col-lg-7">
-    <?= $form->field($model, 'tipo_certificado')->dropDownList([ 'certificado de atencion' => 'Certificado de atencion', 'certificado de estado clínico' => 'Certificado de estado clínico', 'certificado de reporte medico' => 'Certificado de reporte medico', ], ['prompt' => 'Elija el tipo de certificado']) ?>
-             
+            <?= $form->field($model, 'tipo_certificado')->dropDownList([ 'certificado de atencion' => 'Certificado de atencion', 'certificado de estado clínico' => 'Certificado de estado clínico', 'certificado de reporte medico' => 'Certificado de reporte medico',], ['prompt' => 'Elija el tipo de certificado']) ?>
         </div>
     </div>
-    
-    
-    
-    <?= $form->field($model, 'detalle')->textarea(['maxlength' => true, 'rows'=> '8'])->hint('Una vez que se emita el certificado proceda a imprimirlo dando click en la parte superior derecha.') ?>
+
+
+
+    <?= $form->field($model, 'detalle')->textarea(['maxlength' => true, 'rows' => '8'])->hint('Una vez que se emita el certificado proceda a imprimirlo dando click en la parte superior derecha.') ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Guardar e Imprimir' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-info' : 'btn btn-primary']) ?>
- <?= yii\bootstrap\Html::a('<i class="glyphicon glyphicon-chevron-left">&nbsp;Cancelar</i>', ['certificado-medico/index'],
-                    ['role'=>'modal-remote', 'class'=>'btn btn-danger' ,'title'=> 'Volver al formulario principal'])?>
+        <?= Html::submitButton($model->isNewRecord ? 'Guardar e Imprimir' : 'Actualizar', ['class' => $model->isNewRecord ? 'btn btn-info' : 'btn btn-primary']) ?>
+        <?= yii\bootstrap\Html::a('<i class="glyphicon glyphicon-chevron-left">&nbsp;Cancelar</i>', ['certificado-medico/index'], ['role' => 'modal-remote', 'class' => 'btn btn-danger', 'title' => 'Volver al formulario principal'])
+        ?>
     </div>
-               
-                 
-  
+
+
+
 
     <?php ActiveForm::end(); ?>
 

@@ -3,14 +3,15 @@
 namespace frontend\controllers;
 
 use Yii;
-use app\models\ExamenHistoriaClinica;
+use frontend\models\ExamenHistoriaClinica;
 use frontend\models\ExamenHistoriaClinicaSearch;
+use app\models\Indicaciones;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
-
+use frontend\models\Model;
 /**
  * ExamenHistoriaClinicaController implements the CRUD actions for ExamenHistoriaClinica model.
  */
@@ -83,8 +84,10 @@ class ExamenHistoriaClinicaController extends Controller
     public function actionCreate()
     {
         $request = Yii::$app->request;
-        $model = new ExamenHistoriaClinica();  
 
+        $model = new \app\models\ExamenHistoriaClinica();  
+        $modelExamen = [new Indicaciones];
+        $modelIndicaciones = [[new Indicaciones]];
         if($request->isAjax){
             /*
             *   Process for ajax request
@@ -95,12 +98,87 @@ class ExamenHistoriaClinicaController extends Controller
                     'title'=> "Create new ExamenHistoriaClinica",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
+                        'modelsExamen' => (empty($modelExamen)) ? [new Indicaciones] : $modelExamen,
+                        'modelsIndicaciones' => (empty($modelIndicaciones)) ? [[new Indicaciones]] : $modelIndicaciones
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
         
                 ];         
-            }else if($model->load($request->post()) && $model->save()){
+            }else if($model->load($request->post())){
+                $modelsExamen = Model::createMultiple(Indicaciones::classname());
+            Model::loadMultiple($modelsExamen, Yii::$app->request->post());
+
+            // validate person and houses models
+            $valid = $model->validate();
+            $valid = Model::validateMultiple($modelsExamen) && $valid;
+
+            if (isset($_POST['Indicaciones'][0][0])) {
+                foreach ($_POST['Indicaciones'] as $indexExamen => $indicaciones) {
+                    foreach ($indicaciones as $indexIndicacion => $indicacion) {
+                        $data['indicacion'] = $indicacion;
+                        $modelIndicacion = new Indicaciones;
+                        $modelIndicacion->load($data);
+                        $modelsIndicacion[$indexExamen][$indexIndicacion] = $modelIndicacion;
+                        $valid = $modelIndicacion->validate();
+                        echo $data['indicacion'].'<br>';
+                    }
+
+                }
+
+            }
+die();
+            if ($valid) {
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $model->save(false)) {
+                        foreach ($modelsExamen as $indexExamen => $modelExamen) {
+
+                            if ($flag === false) {
+                                break;
+                            }
+
+                            $modelExamen->idExamen = $model->idExamen;
+                            $modelExamen->id_paciente = $model->id_paciente;
+
+                            if (!($flag = $modelExamen->save(false))) {
+                                break;
+                            }
+
+                            if (isset($modelsIndicacion[$indexExamen]) && is_array($modelsIndicacion[$indexExamen])) {
+                                foreach ($modelsIndicacion[$indexExamen] as $indexIndicacion => $modelIndicacion) {
+                                    $modelIndicacion->idExamen = $model->idExamen;
+                                    $modelIndicacion->id_paciente = $model->id_paciente;
+                                    if (!($flag = $modelIndicacion->save(false))) {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if ($flag) {
+                        $transaction->commit();
+                        return $this->redirect(['view', 'id' => $model->id_paciente]);
+                    } else {
+                        $transaction->rollBack();
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                }
+            }else{
+                return [
+                    'title'=> "Crear ExamenHistoriaClinica",
+                    'content'=>$this->renderAjax('create', [
+                        'model' => $model,
+                        'modelsExamen' => (empty($modelExamen)) ? [new Indicaciones] : $modelExamen,
+                        'modelsIndicaciones' => (empty($modelIndicaciones)) ? [[new Indicaciones]] : $modelIndicaciones
+                    ]),
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+        
+                ];
+            }
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
                     'title'=> "Create new ExamenHistoriaClinica",
@@ -114,6 +192,8 @@ class ExamenHistoriaClinicaController extends Controller
                     'title'=> "Create new ExamenHistoriaClinica",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
+                        'modelsExamen' => (empty($modelExamen)) ? [new Indicaciones] : $modelExamen,
+                        'modelsIndicaciones' => (empty($modelIndicaciones)) ? [[new Indicaciones]] : $modelIndicaciones
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -129,12 +209,73 @@ class ExamenHistoriaClinicaController extends Controller
             } else {
                 return $this->render('create', [
                     'model' => $model,
+                    'modelsExamen' => (empty($modelExamen)) ? [new Indicaciones] : $modelExamen,
+                    'modelsIndicaciones' => (empty($modelIndicaciones)) ? [[new Indicaciones]] : $modelIndicaciones
                 ]);
             }
         }
        
     }
+ public function multiple(){
+            $modelsExamen = Model::createMultiple(ExamenHistoriaClinica::classname());
+            Model::loadMultiple($modelsExamen, Yii::$app->request->post());
 
+            // validate person and houses models
+            $valid = $model->validate();
+            $valid = Model::validateMultiple($modelsExamen) && $valid;
+
+            if (isset($_POST['indicacion'][0][0])) {
+                foreach ($_POST['indicacion'] as $indexExamen => $indicaciones) {
+                    foreach ($indicacioness as $indexIndicacionn => $indicacion) {
+                        $data['indicacion'] = $examen;
+                        $modelIndicacion = new ExamenHistoriaClinica;
+                        $modelIndicacion->load($data);
+                        $modelsIndicacion[$indexExamen][$indexIndicacion] = $modelIndicacion;
+                        $valid = $modelIndicacion->validate();
+                    }
+                }
+            }
+
+            if ($valid) {
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $model->save(false)) {
+                        foreach ($modelsExamen as $indexExamen => $modelExamen) {
+
+                            if ($flag === false) {
+                                break;
+                            }
+
+                            $modelExamen->idExamen = $model->idExamen;
+                            $modelExamen->id_paciente = $model->id_paciente;
+
+                            if (!($flag = $modelExamen->save(false))) {
+                                break;
+                            }
+
+                            if (isset($modelsIndicacion[$indexExamen]) && is_array($modelsIndicacion[$indexExamen])) {
+                                foreach ($modelsIndicacion[$indexExamen] as $indexIndicacion => $modelIndicacion) {
+                                    $modelIndicacion->idExamen = $model->idExamen;
+                                    $modelIndicacion->id_paciente = $model->id_paciente;
+                                    if (!($flag = $modelIndicacion->save(false))) {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if ($flag) {
+                        $transaction->commit();
+                        return $this->redirect(['view', 'id' => $model->id_paciente]);
+                    } else {
+                        $transaction->rollBack();
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                }
+            }
+ }
     /**
      * Updates an existing ExamenHistoriaClinica model.
      * For ajax request will return json object

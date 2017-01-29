@@ -13,24 +13,24 @@ use Yii;
  * @property string $fechaRegistro
  * @property string $reporte
  */
-class Reportepacientes extends \yii\db\ActiveRecord
-{
+class Reportepacientes extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'reportepacientes';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['fechainicio', 'fechafin', 'fechaRegistro'], 'required'],
             [['fechainicio', 'fechafin', 'fechaRegistro'], 'safe'],
+            ['fechainicio', 'validarFechaInicio'],
+            ['fechafin', 'validarFechaFin'],
             [['reporte'], 'string', 'max' => 240],
         ];
     }
@@ -38,14 +38,26 @@ class Reportepacientes extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'idreporte' => 'Idreporte',
-            'fechainicio' => 'Fechainicio',
-            'fechafin' => 'Fechafin',
+            'fechainicio' => 'Fecha Inicio',
+            'fechafin' => 'Fecha Fin',
             'fechaRegistro' => 'Fecha Registro',
             'reporte' => 'Reporte',
         ];
     }
+
+    public function validarFechaInicio($attribute, $params) {
+        if (strtotime($this->fechainicio) > strtotime($this->fechafin)) {
+            $this->addError($attribute, 'Fecha de Inicio Incorrecta.');
+        }
+    }
+
+    public function validarFechafin($attribute, $params) {
+        if (strtotime($this->fechafin) < strtotime($this->fechainicio)) {
+            $this->addError($attribute, 'Fecha Fin Incorrecta.');
+        }
+    }
+
 }

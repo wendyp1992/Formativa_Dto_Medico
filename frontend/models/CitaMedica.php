@@ -47,8 +47,7 @@ class CitaMedica extends \yii\db\ActiveRecord
             [['revision_fisica', 'sintomas', 'diagnostico_exFisicos', 'diagnostico', 'tratamiento_sm'], 'string'],
             [['id_paciente'], 'integer'],
             [['fecha_cita'], 'safe'],
-            [['doctor'], 'string', 'max' => 20],
-            [['frc_cardiaca', 'tipo_atencion'], 'string', 'max' => 40],
+            [['doctor', 'frc_cardiaca', 'tipo_atencion'], 'string', 'max' => 40],
             [['presion_arterial'], 'string', 'max' => 30],
             [['id_paciente'], 'exist', 'skipOnError' => true, 'targetClass' => Paciente::className(), 'targetAttribute' => ['id_paciente' => 'id_paciente']],
         ];
@@ -59,9 +58,8 @@ class CitaMedica extends \yii\db\ActiveRecord
      */
     public function attributeLabels()
     {
-        
         return [
-            'doctor' => 'Doctor',
+          'doctor' => 'Doctor',
             'id_cita' => 'Id Cita',
             'temperatura' => 'Temperatura º',
             'peso' => 'Peso Kg',

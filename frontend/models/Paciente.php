@@ -49,8 +49,8 @@ class Paciente extends \yii\db\ActiveRecord
             'id_paciente' => 'Id Paciente',
             'cedula' => 'Cedula',
             'tipo_paciente' => 'Tipo Paciente',
-            'fecha_regPaciente' => 'Fecha Reg Paciente',
-            'num_matricula' => 'Num Matricula',
+            'fecha_regPaciente' => 'Fecha Registro Paciente',
+            'num_matricula' => 'Numero de Matricula',
         ];
     }
 

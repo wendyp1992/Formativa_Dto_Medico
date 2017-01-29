@@ -15,6 +15,8 @@ use Yii;
  * @property string $estado_civil
  * @property integer $id_paciente
  * @property string $cedula_trab
+ *
+ * @property Paciente $idPaciente
  */
 class Dependiente extends \yii\db\ActiveRecord {
 
@@ -33,12 +35,13 @@ class Dependiente extends \yii\db\ActiveRecord {
             [['cedula', 'nombres', 'apellidos', 'id_paciente', 'cedula_trab'], 'required'],
             [['fecha_regDependiente'], 'safe'],
             [['id_paciente'], 'integer'],
-            [['fecha_nac'], 'validarFechaNacimiento'],
-            [['cedula'], 'validarCedula'],
-            [['estado_civil'], 'validarEdad'],
             [['cedula', 'cedula_trab'], 'string', 'max' => 10],
             [['nombres', 'apellidos', 'fecha_nac', 'estado_civil'], 'string', 'max' => 40],
             [['cedula'], 'unique'],
+            [['id_paciente'], 'exist', 'skipOnError' => true, 'targetClass' => Paciente::className(), 'targetAttribute' => ['id_paciente' => 'id_paciente']],
+            ['fecha_nac', 'validarFechaNacimiento'],
+            ['cedula', 'validarCedula'],
+            ['estado_civil', 'validarEdad'],
         ];
     }
 
@@ -48,7 +51,7 @@ class Dependiente extends \yii\db\ActiveRecord {
     public function attributeLabels() {
         return [
             'cedula' => 'Cedula',
-            'fecha_regDependiente' => 'Fecha Reg Dependiente',
+            'fecha_regDependiente' => 'Fecha Registro Dependiente',
             'nombres' => 'Nombres',
             'apellidos' => 'Apellidos',
             'fecha_nac' => 'Fecha Nacimiento',
@@ -56,6 +59,13 @@ class Dependiente extends \yii\db\ActiveRecord {
             'id_paciente' => 'Id Paciente',
             'cedula_trab' => 'Cedula Trabajador',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIdPaciente() {
+        return $this->hasOne(Paciente::className(), ['id_paciente' => 'id_paciente']);
     }
 
     public function validarFechaNacimiento($attribute, $params) {
@@ -75,7 +85,6 @@ class Dependiente extends \yii\db\ActiveRecord {
     public function validarEdad($attribute, $params) {
         include("../../frontend/validadores/php/edad.php");
         $edad = new \edad();
-
         if (!$edad->estdoCivil($this->fecha_nac)) {
             $this->addError($attribute, 'Error');
         }

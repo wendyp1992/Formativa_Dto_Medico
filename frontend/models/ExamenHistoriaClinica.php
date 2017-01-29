@@ -55,20 +55,8 @@ class ExamenHistoriaClinica extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdExamen0()
-    {
-        return $this->hasOne(Examen::className(), ['idExamen' => 'idExamen']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getIdPaciente()
-    {
-        return $this->hasOne(HistoriaClinica::className(), ['id_paciente' => 'id_paciente']);
-    }
-    
-    public function getExamenes() {
+   
+     public function getExamenes() {
         $query = new Query();
         $query->select('*')
                 ->from('examen');
@@ -82,5 +70,5 @@ class ExamenHistoriaClinica extends \yii\db\ActiveRecord
         $model = $query->createCommand()->queryAll();
         return ArrayHelper::map($model, 'id_paciente', 'cedula');
     }
-
 }
+

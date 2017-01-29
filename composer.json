@@ -23,7 +23,9 @@
         "johnitvn/yii2-ajaxcrud": "*",
         "bedezign/yii2-audit": "^1.0",
         "kartik-v/yii2-widget-datetimepicker": "*",
-        "yiisoft/yii2-httpclient": "^2.0"
+        "yiisoft/yii2-httpclient": "^2.0",
+        "wbraganca/yii2-dynamicform": "*",
+        "kartik-v/yii2-widget-datepicker": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
