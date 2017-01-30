@@ -150,8 +150,8 @@ class CertificadoMedicoController extends Controller
             //'cssInline' => '.kv-heading-1{font-size:14px}',
             'options' => ['title' => 'Reporte de Pacientes atendidos mensualmente'],
             'methods' => [
-                'setHeader' => ['Generado: ' . date("r")],
-                'setFooter' => ['|Página {PAGENO}|'],
+               // 'setHeader' => ['Generado: ' . date("r")],
+                //'setFooter' => ['|Página {PAGENO}|'],
             ]
         ]);
         return $pdf->render('reporte');

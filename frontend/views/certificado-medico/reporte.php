@@ -1,41 +1,78 @@
+<?php
 
-<style>
-table, th, td {
-    border: 1px solid black;
-}
-</style>
+use app\models\Paciente;
+use yii\httpclient\Client;
+use yii\data\ArrayDataProvider;
+use yii\helpers\Json;
 
-
-    <div class="panel panel-info">
-      <div class="panel-heading">REPORTE MEDICO</div>
-      <div class="panel-body">
-     
-          <h6>
-              <strong>TIPO: </strong> <?= $model->tipo_certificado?>
-          </h6>              
- 
-
-          <h6>
-              <strong>IDENTIFICACION: </strong> <?= $model->identificacion_persona?>
-          </h6>              
+$HomeUrl = yii\helpers\Url::base();
+?>
 
 
-      </div>
-    </div>
+<div>
+    <table>
+        <tr>
+            <td><IMG SRC=<?php echo $HomeUrl ?>/images/logo.jpg WIDTH=100>
+            </td>
+            <td><h3>PONTIFICIA UNIVERSIDAD CATÓLICA DEL ECUADOR</h3>
+        <center><h4>SEDE ESMERALDAS</h4></center>
+        </td>
+        </tr>
+    </table>
+        <b><h2 ALIGN=center>SERVICIO MÉDICO</h2></b><br>
 
-<br><hr>
-<table class=" table table-bordered" cellspacing="40">
-    <thead>
+    <b><h3 ALIGN=center><u>CERTIFICADO MÉDICO</u></h3></b><br>
+    <b><p ALIGN=right>Esmeraldas, <?php echo " " . date("d") . " del " . date("m") . " de " . date("Y"); ?></p></b>
 
-    </thead>
-    <tbody>
-        
-           <tr>
-            <td><?=$model->detalle?></td>
-        </tr>  
+    <?php
+    $Datos = Paciente::findOne(['cedula' => $model->identificacion_persona]);
+    $client = new Client(['baseUrl' => 'http://mundogya.com/servicios/frontend/web/']);
+    if ($Datos->tipo_paciente != 'Dependiente') {
+        if ($Datos->tipo_paciente == 'Estudiante') {
+            $response = $client->createRequest()
+                    ->setUrl('estudiantes?nummatricula=' . $Datos->num_matricula)//toma los datos del controlador estudiantes del servicio que nos estan dando
+                    ->addHeaders(['content-type' => 'application/json'])
+                    ->send();
+        } else {
+            $response = $client->createRequest()
+                    ->setUrl('trabajadores?cedula=' . $Datos->cedula)//toma los datos del controlador estudiantes del servicio que nos estan dando
+                    ->addHeaders(['content-type' => 'application/json'])
+                    ->send();
+        }
+        $data = Json::decode($response->content);
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $data,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+        ?>
 
-    </tbody>
-</table>
+        <strong>Tipo de Paciente: </strong><?php echo $Datos->tipo_paciente ?><br>
+        <br>        <br>
+
+        <?php echo $dataProvider->allModels[0]['nombres'] ?>
+        <?php echo $dataProvider->allModels[0]['apellidos'] ?>, con cedula de ciudadanía #<?php echo $Datos->cedula ?>.  <?= $model->detalle ?><br>
+        <?php
+    } else {
+        $dependiente = \app\models\Dependiente::findOne(['id_paciente' => $id]);
+        ?>
+        <strong>Tipo de Paciente: </strong><?php echo $Datos->tipo_paciente ?><br>
+        <br>
+        <?php echo $dependiente->nombres ?> 
+        <?php echo $dependiente->apellidos ?>,  con cedula de ciudadanía #<?php echo $Datos->cedula ?>.  <?= $model->detalle ?><br>
+    <?php } ?>
+
+
+    <br><br><br><br><br><br>
+    <b><div ALIGN=center>Dr.</div></b>
+    <b><div ALIGN=center>Medicina General</div></b>
+    <b><div ALIGN=center>REG.H</div></b><br>
+
+
+
+
+</div>
 
 
 

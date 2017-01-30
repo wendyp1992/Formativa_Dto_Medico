@@ -7,6 +7,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use kartik\mpdf\Pdf;
+use \yii\helpers\Url;
 
 /**
  * Site controller
@@ -73,11 +74,14 @@ class SiteController extends Controller {
     /* REPORTE DE PACIENTES ATENDIDOS MENSUALMENTE DIVIDIDOS POR ESTUDIANTES, TRAB Y DEPENDIENTES */
 
     public function actionReporte1() {
+        $HomeUrl = Url::base();
+
 //        $mpdf= new \mPDF;
 //        $mpdf->WriteHTML('hello');
 //        $mpdf->Output();
 //        exit;
         //http://demos.krajee.com/mpdf
+
         $id_reporte = \app\models\Reportepacientes::findOne(['idreporte' => $_GET['idreporte']]);
         $pdf = new Pdf([
             'content' => $this->renderPartial('reporte1', ['id_reporte' => $id_reporte]),
@@ -85,11 +89,12 @@ class SiteController extends Controller {
             'format' => Pdf::FORMAT_A4,
             //'orientation'=>Pdf::ORIENT_POTRAIT,
             'destination' => Pdf::DEST_BROWSER,
-            //'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+            'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
             //'cssInline' => '.kv-heading-1{font-size:14px}',
             'options' => ['title' => 'Reporte de Pacientes atendidos mensualmente'],
             'methods' => [
-                'setHeader' => ['Generado: ' . date("r")],
+                'setHeader' => [
+                    'Generado: ' . date("r")],
                 'setFooter' => ['|Página {PAGENO}|'],
             ]
         ]);
