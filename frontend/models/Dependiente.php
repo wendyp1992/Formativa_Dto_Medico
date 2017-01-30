@@ -35,7 +35,7 @@ class Dependiente extends \yii\db\ActiveRecord
 
         return [
             [['fecha_regDependiente'], 'safe'],
-           // [['id_paciente', 'cedula_trab'], 'required'],
+            [['fecha_nac', 'cedula','estado_civil','nombres', 'apellidos'], 'required'],
             [['id_paciente'], 'integer'],
             [['cedula'], 'unique'],
             ['fecha_nac', 'validarFechaNacimiento'],

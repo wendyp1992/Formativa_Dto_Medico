@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
+use kartik\mpdf\Pdf;
 
 /**
  * ExamenHistoriaClinicaController implements the CRUD actions for ExamenHistoriaClinica model.
@@ -50,26 +51,25 @@ class ExamenHistoriaClinicaController extends Controller
 
     /**
      * Displays a single ExamenHistoriaClinica model.
-     * @param integer $idExamen
-     * @param integer $id_paciente
+     * @param integer $id
      * @return mixed
      */
-    public function actionView($idExamen, $id_paciente)
+    public function actionView($id)
     {   
         $request = Yii::$app->request;
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> "ExamenHistoriaClinica #".$idExamen, $id_paciente,
+                    'title'=> "ExamenHistoriaClinica #".$id,
                     'content'=>$this->renderAjax('view', [
-                        'model' => $this->findModel($idExamen, $id_paciente),
+                        'model' => $this->findModel($id),
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Edit',['update','idExamen, $id_paciente'=>$idExamen, $id_paciente],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                            Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
                 ];    
         }else{
             return $this->render('view', [
-                'model' => $this->findModel($idExamen, $id_paciente),
+                'model' => $this->findModel($id),
             ]);
         }
     }
@@ -83,7 +83,7 @@ class ExamenHistoriaClinicaController extends Controller
     public function actionCreate()
     {
         $request = Yii::$app->request;
-        $model = new ExamenHistoriaClinica();  
+        $model = new ExamenHistoriaClinica();   
 
         if($request->isAjax){
             /*
@@ -100,15 +100,28 @@ class ExamenHistoriaClinicaController extends Controller
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
         
                 ];         
-            }else if($model->load($request->post()) && $model->save()){
-                return [
+            }else if($model->load($request->post())){
+                $model->idTiposExamen = implode(",", $model->idTiposExamen);
+                if($model->save()){
+                    return [
                     'forceReload'=>'#crud-datatable-pjax',
                     'title'=> "Create new ExamenHistoriaClinica",
                     'content'=>'<span class="text-success">Create ExamenHistoriaClinica success</span>',
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                             Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
         
-                ];         
+                ]; 
+                }else{
+                 return [
+                    'title'=> "Create new ExamenHistoriaClinica",
+                    'content'=>$this->renderAjax('create', [
+                        'model' => $model,
+                    ]),
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+        
+                ]; 
+                }          
             }else{           
                 return [
                     'title'=> "Create new ExamenHistoriaClinica",
@@ -124,8 +137,17 @@ class ExamenHistoriaClinicaController extends Controller
             /*
             *   Process for non-ajax request
             */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'idExamen' => $model->idExamen, 'id_paciente' => $model->id_paciente]);
+            if ($model->load($request->post())) {
+                 if ($model->validate()) {           
+                $model->idTiposExamen = implode(",", $model->idTiposExamen);
+                if($model->save()){
+                    return $this->redirect(['view', 'id' => $model->IdExamenHistoria]);
+                }else{
+                 return $this->render('create', [
+                    'model' => $model,
+                ]);
+                }
+                }
             } else {
                 return $this->render('create', [
                     'model' => $model,
@@ -139,15 +161,14 @@ class ExamenHistoriaClinicaController extends Controller
      * Updates an existing ExamenHistoriaClinica model.
      * For ajax request will return json object
      * and for non-ajax request if update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $idExamen
-     * @param integer $id_paciente
+     * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($idExamen, $id_paciente)
+    public function actionUpdate($id)
     {
-        $request = Yii::$app->request;
-        $model = $this->findModel($idExamen, $id_paciente);       
 
+        $request = Yii::$app->request;
+        $model = $this->findModel($id);       
         if($request->isAjax){
             /*
             *   Process for ajax request
@@ -155,26 +176,42 @@ class ExamenHistoriaClinicaController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Update ExamenHistoriaClinica #".$idExamen, $id_paciente,
+                    'title'=> "Update ExamenHistoriaClinica #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
                 ];         
-            }else if($model->load($request->post()) && $model->save()){
-                return [
+            }else 
+
+            if($model->load($request->post())){
+                // $modelIndicaciones->idExamenHistoriaClinica=$model->IdExamenHistoria;
+                $model->idTiposExamen = implode(",", $model->idTiposExamen);
+                if($model->save()){
+                    return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "ExamenHistoriaClinica #".$idExamen, $id_paciente,
+                    'title'=> "ExamenHistoriaClinica #".$id,
                     'content'=>$this->renderAjax('view', [
+                        'model' => $model,
+                        'modelIndicaciones'=>$model
+                    ]),
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                            Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                ];
+                }else{
+                return [
+                    'title'=> "Update ExamenHistoriaClinica #".$id,
+                    'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Edit',['update','idExamen, $id_paciente'=>$idExamen, $id_paciente],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
                 ];    
+                }    
             }else{
                  return [
-                    'title'=> "Update ExamenHistoriaClinica #".$idExamen, $id_paciente,
+                    'title'=> "Update ExamenHistoriaClinica #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -186,8 +223,16 @@ class ExamenHistoriaClinicaController extends Controller
             /*
             *   Process for non-ajax request
             */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'idExamen' => $model->idExamen, 'id_paciente' => $model->id_paciente]);
+            if ($model->load($request->post())) {
+                $model->idTiposExamen = implode(",", $model->idTiposExamen);
+                if($model->save()){
+                    return $this->redirect(['view', 'id' => $model->IdExamenHistoria]);
+                }else{
+                 return $this->render('update', [
+                    'model' => $model,
+                ]);
+                }
+                
             } else {
                 return $this->render('update', [
                     'model' => $model,
@@ -200,14 +245,13 @@ class ExamenHistoriaClinicaController extends Controller
      * Delete an existing ExamenHistoriaClinica model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $idExamen
-     * @param integer $id_paciente
+     * @param integer $id
      * @return mixed
      */
-    public function actionDelete($idExamen, $id_paciente)
+    public function actionDelete($id)
     {
         $request = Yii::$app->request;
-        $this->findModel($idExamen, $id_paciente)->delete();
+        $this->findModel($id)->delete();
 
         if($request->isAjax){
             /*
@@ -229,8 +273,7 @@ class ExamenHistoriaClinicaController extends Controller
      * Delete multiple existing ExamenHistoriaClinica model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $idExamen
-     * @param integer $id_paciente
+     * @param integer $id
      * @return mixed
      */
     public function actionBulkDelete()
@@ -256,18 +299,32 @@ class ExamenHistoriaClinicaController extends Controller
         }
        
     }
+    public function actionReport($id) {
+     $pdf = new Pdf([
+        'mode' => Pdf::MODE_CORE, // leaner size using standard fonts
+        'content' => $this->renderPartial('examen_pdf',['model'=> $this->findModel($id)]),
+        'options' => [
+            'title' => 'Examen',
+            'subject' => 'Examenes PUCESE'
+        ],
+        'methods' => [
+            'SetHeader' => ['Generado Por PUCESE||Fecha : ' . date("r")],
+            'SetFooter' => ['|Pagina {PAGENO}|'],
+        ]
+    ]);
+    return $pdf->render();
+}
 
     /**
      * Finds the ExamenHistoriaClinica model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $idExamen
-     * @param integer $id_paciente
+     * @param integer $id
      * @return ExamenHistoriaClinica the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($idExamen, $id_paciente)
+    protected function findModel($id)
     {
-        if (($model = ExamenHistoriaClinica::findOne(['idExamen' => $idExamen, 'id_paciente' => $id_paciente])) !== null) {
+        if (($model = ExamenHistoriaClinica::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

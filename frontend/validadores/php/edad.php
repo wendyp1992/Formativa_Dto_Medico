@@ -13,7 +13,7 @@
  */
 class edad {
 
-    function calculaedad($fechanacimiento) {
+    function calculaedad($fechanacimiento='00-00-0000') {
         list($ano, $mes, $dia) = explode("-", $fechanacimiento);
         $ano_diferencia = date("Y") - $ano;
         $mes_diferencia = date("m") - $mes;

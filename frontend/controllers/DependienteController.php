@@ -126,6 +126,8 @@ class DependienteController extends Controller {
             }
         } else {
             if ($model->load($request->post())) {
+                
+                if($model->validate()){
                 $model->cedula_trab = $sesion->get("cedulaT");
                 $paciente = Paciente::findOne(['cedula' => $model->cedula]);
                 if (count($paciente) == 0) {
@@ -139,7 +141,8 @@ class DependienteController extends Controller {
                 if ($model->save()) {
 
                     return $this->redirect(['view', 'id' => $model->id_paciente]);
-                } else {
+                }
+            } else {
                     if (empty($sesion->get("dataProvider"))) {
                         $dataProvider = $sesion->get("dataProvider");
                         $sesion->remove("dataProvider");
@@ -150,6 +153,7 @@ class DependienteController extends Controller {
                                 'dataProvider' => $dataProvider,
                     ]);
                 }
+
             } else {
                 return $this->render('create', [
                             'model' => $model,
