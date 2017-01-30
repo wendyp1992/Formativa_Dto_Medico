@@ -8,7 +8,6 @@ use yii\helpers\Json;
 $HomeUrl = yii\helpers\Url::base();
 ?>
 
-
 <div>
     <table>
         <tr>
@@ -25,6 +24,7 @@ $HomeUrl = yii\helpers\Url::base();
     <b><p ALIGN=right>Esmeraldas, <?php echo " " . date("d") . " del " . date("m") . " de " . date("Y"); ?></p></b>
 
     <?php
+    
     $Datos = Paciente::findOne(['cedula' => $model->identificacion_persona]);
     $client = new Client(['baseUrl' => 'http://mundogya.com/servicios/frontend/web/']);
     if ($Datos->tipo_paciente != 'Dependiente') {
@@ -55,7 +55,7 @@ $HomeUrl = yii\helpers\Url::base();
         <?php echo $dataProvider->allModels[0]['apellidos'] ?>, con cedula de ciudadanía #<?php echo $Datos->cedula ?>.  <?= $model->detalle ?><br>
         <?php
     } else {
-        $dependiente = \app\models\Dependiente::findOne(['id_paciente' => $id]);
+        $dependiente = \app\models\Dependiente::findOne(['cedula' => $model->identificacion_persona]);
         ?>
         <strong>Tipo de Paciente: </strong><?php echo $Datos->tipo_paciente ?><br>
         <br>

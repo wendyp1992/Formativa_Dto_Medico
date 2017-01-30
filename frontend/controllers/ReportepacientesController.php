@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
+use kartik\mpdf\Pdf;
 
 /**
  * ReportepacientesController implements the CRUD actions for Reportepacientes model.
@@ -86,16 +87,58 @@ class ReportepacientesController extends Controller {
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($request->isGet) {
                 return [
-                    'title' => "Crear Reporte de Pacientes atendidos",
+                    'title' => "Crear Reporte de Pacientes Atendidos",
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                    Html::button('Guardar e Imprimir', ['class' => 'btn btn-primary', 'type' => "submit"])
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
-            } else
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['site/reporte1', 'idreporte' => $model->idreporte]);
+            } else if ($model->load($request->post())) {
+                $model->idreporte = implode(",", $model->idreporte);
+                if ($model->save()) {
+                    return [
+                        'forceReload' => '#crud-datatable-pjax',
+                        'title' => "Create new ExamenHistoriaClinica",
+                        'content' => '<span class="text-success">Create ExamenHistoriaClinica success</span>',
+                        'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                        Html::a('Create More', ['create'], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+                    ];
+                } else {
+                    return [
+                        'title' => "Create new ExamenHistoriaClinica",
+                        'content' => $this->renderAjax('create', [
+                            'model' => $model,
+                        ]),
+                        'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                        Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
+                    ];
+                }
+            } else {
+                return [
+                    'title' => "Create new ExamenHistoriaClinica",
+                    'content' => $this->renderAjax('create', [
+                        'model' => $model,
+                    ]),
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
+                ];
+            }
+        } else {
+            /*
+             *   Process for non-ajax request
+             */
+            if ($model->load($request->post())) {
+                if ($model->validate()) {
+                    $model->idreporte = implode(",", $model->idreporte);
+                    if ($model->save()) {
+                        return $this->redirect(['view', 'id' => $model->idreporte]);
+                    } else {
+                        return $this->render('create', [
+                                    'model' => $model,
+                        ]);
+                    }
+                }
             } else {
                 return $this->render('create', [
                             'model' => $model,
@@ -230,6 +273,22 @@ class ReportepacientesController extends Controller {
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionVista($id) {
+        $pdf = new Pdf([
+            'mode' => Pdf::MODE_CORE, // leaner size using standard fonts
+            'content' => $this->renderPartial('reporte1', ['id' => $this->findModel($id)]),
+            'options' => [
+                'title' => 'Reporte Pacientes',
+                'subject' => 'Reporte PUCESE'
+            ],
+            'methods' => [
+                'SetHeader' => ['Generado Por PUCESE||Fecha : ' . date("r")],
+                'SetFooter' => ['|Pagina {PAGENO}|'],
+            ]
+        ]);
+        return $pdf->render();
     }
 
 }

@@ -7,7 +7,7 @@ use johnitvn\ajaxcrud\CrudAsset;
 use johnitvn\ajaxcrud\BulkButtonWidget;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\ExamenHistoriaClinicaSearch */
+/* @var $searchModel frontend\models\ExamenHistoriaClinicaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Examen Historia Clinicas';
@@ -59,15 +59,7 @@ CrudAsset::register($this);
     </div>
 </div>
 <?php Modal::begin([
-    'size' => Modal::SIZE_LARGE,
     "id"=>"ajaxCrudModal",
     "footer"=>"",// always need it for jquery plugin
-    'options' => [
-        'tabindex' => false // important for Select2 to work properly
-    ],
 ])?>
 <?php Modal::end(); ?>
-
-<?php
-$this->registerJs('$(\'.modal-lg\').css(\'width\', \'90%\');');
-?>

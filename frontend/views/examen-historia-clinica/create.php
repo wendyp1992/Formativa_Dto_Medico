@@ -10,7 +10,5 @@ use yii\helpers\Html;
 <div class="examen-historia-clinica-create">
     <?= $this->render('_form', [
         'model' => $model,
-        'modelsExamen' => $modelsExamen,
-        'modelsIndicaciones' => $modelsIndicaciones,
     ]) ?>
 </div>

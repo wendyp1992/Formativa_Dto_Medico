@@ -16,7 +16,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
     'model' => $modelsIndicacion[0],
     'formId' => 'dynamic-form',
     'formFields' => [
-        'description'
+        'indicacion'
     ],
 ]); ?>
 <table class="table table-bordered">

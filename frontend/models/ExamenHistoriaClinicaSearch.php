@@ -18,8 +18,7 @@ class ExamenHistoriaClinicaSearch extends ExamenHistoriaClinica
     public function rules()
     {
         return [
-            [['idExamen', 'id_paciente'], 'integer'],
-            [['indicaciones'], 'safe'],
+            [['IdExamenHistoria', 'id_paciente'], 'integer'],
         ];
     }
 
@@ -56,11 +55,9 @@ class ExamenHistoriaClinicaSearch extends ExamenHistoriaClinica
         }
 
         $query->andFilterWhere([
-            'idExamen' => $this->idExamen,
+            'IdExamenHistoria' => $this->IdExamenHistoria,
             'id_paciente' => $this->id_paciente,
         ]);
-
-        $query->andFilterWhere(['like', 'indicaciones', $this->indicaciones]);
 
         return $dataProvider;
     }

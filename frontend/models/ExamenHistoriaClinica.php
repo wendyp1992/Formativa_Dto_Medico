@@ -5,16 +5,13 @@ namespace app\models;
 use Yii;
 use \yii\db\Query;
 use yii\helpers\ArrayHelper;
-
 /**
  * This is the model class for table "examen_historia_clinica".
  *
- * @property integer $idExamen
+ * @property integer $IdExamenHistoria
  * @property integer $id_paciente
- * @property string $indicaciones
- *
- * @property Examen $idExamen0
- * @property HistoriaClinica $idPaciente
+ * @property string $idTiposExamen
+ * @property string $indicacion
  */
 class ExamenHistoriaClinica extends \yii\db\ActiveRecord
 {
@@ -32,11 +29,9 @@ class ExamenHistoriaClinica extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idExamen', 'id_paciente'], 'required'],
-            [['idExamen', 'id_paciente'], 'integer'],
-            [['indicaciones'], 'string'],
-            [['idExamen'], 'exist', 'skipOnError' => true, 'targetClass' => \common\models\Examen::className(), 'targetAttribute' => ['idExamen' => 'idExamen']],
-            [['id_paciente'], 'exist', 'skipOnError' => true, 'targetClass' => HistoriaClinica::className(), 'targetAttribute' => ['id_paciente' => 'id_paciente']],
+            [['id_paciente', 'idTiposExamen', 'indicacion'], 'required'],
+            [['id_paciente'], 'integer'],
+            //[['idTiposExamen', 'indicacion'], 'string'],
         ];
     }
 
@@ -46,22 +41,37 @@ class ExamenHistoriaClinica extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'idExamen' => 'Id Examen',
+            'IdExamenHistoria' => 'Id Examen Historia',
             'id_paciente' => 'Id Paciente',
-            'indicaciones' => 'Indicaciones',
+            'idTiposExamen' => 'Id Tipos Examen',
+            'indicacion' => 'Indicacion',
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-   
      public function getExamenes() {
         $query = new Query();
         $query->select('*')
                 ->from('examen');
         $model = $query->createCommand()->queryAll();
         return ArrayHelper::map($model, 'idExamen', 'nom_examen');
+    }
+     public function getTiposExamenes($resp) {
+        $query = new \yii\db\Query();
+        $query->select(['examen.*', 'nom_examen', 'idExamen'])
+                ->from('examen')->where(['idExamen' => $resp]);
+        $cmd = $query->createCommand();
+        $levels = $cmd->queryAll();
+        $textResp = '';
+        foreach ($levels as $responsable):
+            $textResp.="(" . $responsable['nom_examen'] . ") ";
+        endforeach;
+        return $textResp;
+    }
+
+    public function getIndicaciones($id) {
+                $dataProvider = new ActiveDataProvider([
+            'query' => Indicaciones::find(['idExamenHistoriaClinica' => $id]),
+        ]);
+            return $dataProvider;
     }
     public function getPacientes() {
         $query = new Query();
@@ -71,4 +81,3 @@ class ExamenHistoriaClinica extends \yii\db\ActiveRecord
         return ArrayHelper::map($model, 'id_paciente', 'cedula');
     }
 }
-
