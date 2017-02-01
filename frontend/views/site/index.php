@@ -10,7 +10,7 @@ $relativeHomeUrl = yii\helpers\Url::base();
         <br> <br><br><br><br>
 <IMG SRC=<?php echo $relativeHomeUrl ?>/images/logo.jpg>
 
-                <h1>DEPARTAMENTO MÉDICO</h1>
+                <h1>DEPARTAMENTO hhollajasMÉDICO</h1>
                 <p>Vista Principal </p>
                 
     </div>
