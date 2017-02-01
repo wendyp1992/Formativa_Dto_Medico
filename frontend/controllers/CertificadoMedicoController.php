@@ -8,7 +8,9 @@ use frontend\models\CertificadoMedicoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use kartik\mpdf\Pdf;
+use \yii\web\Response;
+use yii\helpers\Html;
+
 /**
  * CertificadoMedicoController implements the CRUD actions for CertificadoMedico model.
  */
@@ -23,7 +25,8 @@ class CertificadoMedicoController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'delete' => ['post'],
+                    'bulk-delete' => ['post'],
                 ],
             ],
         ];
@@ -34,7 +37,7 @@ class CertificadoMedicoController extends Controller
      * @return mixed
      */
     public function actionIndex()
-    {
+    {    
         $searchModel = new CertificadoMedicoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -44,66 +47,207 @@ class CertificadoMedicoController extends Controller
         ]);
     }
 
+
     /**
      * Displays a single CertificadoMedico model.
      * @param integer $id
      * @return mixed
      */
     public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new CertificadoMedico model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new CertificadoMedico();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['reporte', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
+    {   
+        $request = Yii::$app->request;
+        if($request->isAjax){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return [
+                    'title'=> "CERTIFICADO MÉDICO #".$id,
+                    'content'=>$this->renderAjax('view', [
+                        'model' => $this->findModel($id),
+                    ]),
+                    'footer'=> Html::button('<i class="glyphicon glyphicon-ban-circle"></i> Cerrar',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                            Html::a('<i class="glyphicon glyphicon-edit"></i> Editar',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                ];    
+        }else{
+            return $this->render('view', [
+                'model' => $this->findModel($id),
             ]);
         }
     }
 
     /**
+     * Creates a new CertificadoMedico model.
+     * For ajax request will return json object
+     * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreate()
+    {
+        $request = Yii::$app->request;
+        $model = new CertificadoMedico();  
+
+        if($request->isAjax){
+            /*
+            *   Process for ajax request
+            */
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if($request->isGet){
+                return [
+                    'title'=> " ",
+                    'content'=>$this->renderAjax('create', [
+                        'model' => $model,
+                    ]),
+                           
+                ];         
+            }else if($model->load($request->post()) && $model->save()){
+                return [
+                    'forceReload'=>'#crud-datatable-pjax',
+                    'title'=> "Create new CertificadoMedico",
+                    'content'=>'<span class="text-success">Create CertificadoMedico success</span>',
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
+        
+                ];         
+            }else{           
+                return [
+                    'title'=> "Create new CertificadoMedico",
+                    'content'=>$this->renderAjax('create', [
+                        'model' => $model,
+                    ]),
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+        
+                ];         
+            }
+        }else{
+            /*
+            *   Process for non-ajax request
+            */
+            if ($model->load($request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
+        }
+       
+    }
+
+    /**
      * Updates an existing CertificadoMedico model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * For ajax request will return json object
+     * and for non-ajax request if update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $request = Yii::$app->request;
+        $model = $this->findModel($id);       
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        if($request->isAjax){
+            /*
+            *   Process for ajax request
+            */
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if($request->isGet){
+                return [
+                    'title'=> "",
+                    'content'=>$this->renderAjax('update', [
+                        'model' => $model,
+                    ]),
+                    
+                ];         
+            }else if($model->load($request->post()) && $model->save()){
+                return [
+                    'forceReload'=>'#crud-datatable-pjax',
+                    'title'=> "CertificadoMedico #".$id,
+                    'content'=>$this->renderAjax('view', [
+                        'model' => $model,
+                    ]),
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                            Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                ];    
+            }else{
+                 return [
+                    'title'=> "Update CertificadoMedico #".$id,
+                    'content'=>$this->renderAjax('update', [
+                        'model' => $model,
+                    ]),
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+                ];        
+            }
+        }else{
+            /*
+            *   Process for non-ajax request
+            */
+            if ($model->load($request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
         }
     }
 
     /**
-     * Deletes an existing CertificadoMedico model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Delete an existing CertificadoMedico model.
+     * For ajax request will return json object
+     * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
     {
+        $request = Yii::$app->request;
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        if($request->isAjax){
+            /*
+            *   Process for ajax request
+            */
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
+        }else{
+            /*
+            *   Process for non-ajax request
+            */
+            return $this->redirect(['index']);
+        }
+
+
+    }
+
+     /**
+     * Delete multiple existing CertificadoMedico model.
+     * For ajax request will return json object
+     * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionBulkDelete()
+    {        
+        $request = Yii::$app->request;
+        $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
+        foreach ( $pks as $pk ) {
+            $model = $this->findModel($pk);
+            $model->delete();
+        }
+
+        if($request->isAjax){
+            /*
+            *   Process for ajax request
+            */
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
+        }else{
+            /*
+            *   Process for non-ajax request
+            */
+            return $this->redirect(['index']);
+        }
+       
     }
 
     /**
@@ -121,40 +265,4 @@ class CertificadoMedicoController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-
-    
-//    public function actionReporte($id){
-//        Yii::$app->response->format = 'pdf';
-//        //$mpdf=new \mPDF('utf-8', 'A4-L');
-//        $model = $this->findModel($id);
-//        $this->layout = 'reportes/certificado';
-//        return $this->render('reporte', 
-//                [
-//                    'model' => $model,
-//                ]);        
-//    }
-    
-
-    
-    public function actionReporte($id) {
-        $model = $this->findModel($id);
-        $pdf = new Pdf([
-            'content' => $this->renderPartial('reporte', [
-                'model' => $model,
-            ]),
-            // 'mode'=> Pdf::MODE_CORE,
-            'format' => Pdf::FORMAT_A4,
-            //'orientation'=>Pdf::ORIENT_POTRAIT,
-            'destination' => Pdf::DEST_BROWSER,
-            //'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
-            //'cssInline' => '.kv-heading-1{font-size:14px}',
-            'options' => ['title' => 'Reporte de Pacientes atendidos mensualmente'],
-            'methods' => [
-               // 'setHeader' => ['Generado: ' . date("r")],
-                //'setFooter' => ['|Página {PAGENO}|'],
-            ]
-        ]);
-        return $pdf->render('reporte');
-    }
-
 }

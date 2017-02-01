@@ -11,9 +11,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Cita Medicas', 'url' => ['index']]
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="cita-medica-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>

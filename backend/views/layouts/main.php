@@ -27,24 +27,24 @@ AppAsset::register($this);
         <div class="wrap">
             <?php
             NavBar::begin([
-                'brandLabel' => 'App',
+                'brandLabel' => 'SISTEMA MÉDICO',
                 'brandUrl' => Yii::$app->homeUrl,
                 'options' => [
-                    'class' => 'navbar-inverse navbar-fixed-top',
+                    'class' => 'navbar-blue navbar-fixed-top',
                 ],
             ]);
             $menuItems = [
-                ['label' => 'Principal', 'url' => ['/site/index']],
+                ['label' => 'INICIO', 'url' => ['/site/index']],
             ];
             if (Yii::$app->user->isGuest) {
                 $menuItems[] = ['label' => 'Entrar', 'url' => ['/user/login']];
             } else {
                 $menuItems = [
-                    ['label' => 'Principal', 'url' => ['/site/index']],
+                    ['label' => 'INICIO', 'url' => ['/site/index']],
                         //permitir borrar los datos de los doctores si no ha creado cita medica
                 ];
                 $menuItems[] = [
-                    'label' => 'Insertar',
+                    'label' => 'INSERTAR',
                     'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('superadmin'),
                     'items' => [
                         ['label' => 'Nuevos Doctores', 'url' => ['/user/admin/create'], 'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('superadmin'),],
@@ -54,7 +54,7 @@ AppAsset::register($this);
                     ],
                 ];
                 $menuItems[] = [
-                    'label' => 'Auditoría',
+                    'label' => 'AUDITORÍA',
                     'visible' => Yii::$app->user->identity->isAdmin || Yii::$app->user->can('superadmin'),
                     'items' => [
                         ['label' => 'Accesos', 'url' => ['/audit/entry'],],
@@ -67,7 +67,8 @@ AppAsset::register($this);
                     'items' => [
                         ['label' => 'Mi Cuenta', 'url' => ['user/settings/account'],],
                         ['label' => 'Vista Principal', 'url' => ['/../../frontend/web'],],
-                        ['label' => 'Salir', 'url' => ['/user/security/logout'], 'linkOptions' => ['data-method' => 'post']],
+                        '<li class="divider"></li>',
+                        ['label' => 'Salir del Sistema', 'url' => ['/user/security/logout'], 'linkOptions' => ['data-method' => 'post']],
                     ],
                 ];
             }
@@ -79,21 +80,21 @@ AppAsset::register($this);
             ?>
 
             <div class="container">
-                <?=
-                Breadcrumbs::widget([
-                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-                ])
-                ?>
                 <?= Alert::widget() ?>
                 <?= $content ?>
             </div>
         </div>
 
-        <footer class="footer">
+        <footer class="section-primary">
             <div class="container">
-                <p class="pull-left">&copy; PUCESE <?= date('Y') ?></p>
-
-                <!--p class="pull-right">< ?= Yii::powered() ?></p-->
+                <div class="row">
+                    <div class="col-md-5">
+                        <img src="/DtoMedico/frontend/web/images/logo-puce.png" class="img-responsive pull-right" style="width: 50px">
+                    </div>
+                    <div class="col-md-7" style="padding: 10px;">
+                        PONTIFICIA UNIVERSIDAD CATÓLICA DEL ECUADOR<br>SEDE ESMERALDAS
+                    </div>
+                </div>
             </div>
         </footer>
 

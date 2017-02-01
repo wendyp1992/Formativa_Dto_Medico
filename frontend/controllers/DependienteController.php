@@ -67,12 +67,12 @@ class DependienteController extends Controller {
         if ($request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                'title' => "Dependiente #" . $id,
+                'title' => "PACIENTE DEPENDIENTE #" . $id,
                 'content' => $this->renderAjax('view', [
                     'model' => $this->findModel($id),
                 ]),
-                'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                Html::a('Edit', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+                'footer' => Html::button('<i class="glyphicon glyphicon-ban-circle"></i> Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                Html::a('<i class="glyphicon glyphicon-edit"></i> Editar', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
             ];
         } else {
             return $this->render('view', [
@@ -98,22 +98,18 @@ class DependienteController extends Controller {
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($request->isGet) {
                 return [
-                    'title' => "Crear Paciente Dependiente",
+                    'title' => "<b>CREAR PACIENTE DEPENDIENTE</b>",
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
                         'modelP' => $modelP,
                         'dataProvider' => $dataProvider,
                     ]),
-                   // 'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                   // Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
             } else if ($model->load($request->post()) && $model->save()) {
                 return [
                     'forceReload' => '#crud-datatable-pjax',
                     'title' => "Crear Paciente Dependiente",
                     'content' => '<span class="text-success">Create Dependiente success</span>',
-                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                    Html::a('Crear Más', ['create'], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
                 ];
             } else {
                 return [
@@ -123,8 +119,6 @@ class DependienteController extends Controller {
                         'modelP' => $modelP,
                         'dataProvider' => $dataProvider,
                     ]),
-                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                    Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
             }
         } else {
@@ -148,7 +142,7 @@ class DependienteController extends Controller {
                         $paciente->fecha_regPaciente = date('Y-m-d h:m:s');
                         $model->cedula_trab = $dataProvider->allModels[0]['cedula'];
                         $paciente->save();
-                       // $model->save();
+                        // $model->save();
                         $model->id_paciente = $paciente->id_paciente;
                         return $this->render('create', [
                                     'model' => $model,
@@ -209,31 +203,31 @@ class DependienteController extends Controller {
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($request->isGet) {
                 return [
-                    'title' => "Update Dependiente #" . $id,
+                    'title' => "ACTUALIZAR PACIENTE DEPENDIENTE #" . $id,
                     'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                    Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
+                    'footer' => Html::button('<i class="glyphicon glyphicon-ban-circle"></i> Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('<i class="glyphicon glyphicon-floppy-disk"></i> Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
             } else if ($model->load($request->post()) && $model->save()) {
                 return [
                     'forceReload' => '#crud-datatable-pjax',
-                    'title' => "Dependiente #" . $id,
+                    'title' => "PACIENTE DEPENDIENTE #" . $id,
                     'content' => $this->renderAjax('view', [
                         'model' => $model,
                     ]),
-                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                    Html::a('Edit', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+                    'footer' => Html::button('<i class="glyphicon glyphicon-ban-circle"></i> Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::a('<i class="glyphicon glyphicon-edit"></i> Editar', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
                 ];
             } else {
                 return [
-                    'title' => "Update Dependiente #" . $id,
+                    'title' => "ACTUALIZAR PACIENTE DEPENDIENTE #" . $id,
                     'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                    Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
+                    'footer' => Html::button('<i class="glyphicon glyphicon-ban-circle"></i> Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('<i class="glyphicon glyphicon-floppy-disk"></i> Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
             }
         } else {

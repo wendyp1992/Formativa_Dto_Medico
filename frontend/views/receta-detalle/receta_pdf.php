@@ -20,13 +20,14 @@ $HomeUrl = yii\helpers\Url::base();
 <br><br>    	
 <b><h2 ALIGN=center>SERVICIO MÉDICO</h2></b><br>
 <b><p ALIGN=right>Esmeraldas, <?php echo " " . date("d") . " del " . date("m") . " de " . date("Y"); ?></p></b>
-<strong>PACIENTE: </strong> <?php
-echo Paciente::findOne($model->id_paciente)->cedula;
+<strong>CEDULA: </strong> <?php
+$cita = \app\models\CitaMedica::find()->where(['id_cita' => $model->id_cita])->one();
+echo Paciente::findOne($cita)->cedula;
 echo "<br>";
 ?>
 
 <?php
-$Datos = Paciente::findOne(['id_paciente' => $model->id_paciente]);
+$Datos = Paciente::findOne(['id_paciente' => $cita->id_paciente]);
 $client = new Client(['baseUrl' => 'http://mundogya.com/servicios/frontend/web/']);
 if ($Datos->tipo_paciente != 'Dependiente') {
     if ($Datos->tipo_paciente == 'Estudiante') {
@@ -61,12 +62,39 @@ if ($Datos->tipo_paciente != 'Dependiente') {
     <?php echo $dependiente->apellidos ?><br><br>
 <?php } ?>
 
-<strong>EXAMENES: </strong><?php
-echo $model->getTiposExamenes(array_map('intval', explode(',', $model->idTiposExamen)));
-echo "<br>";
-?><br>
-<strong>DESCRIPCIÓN: </strong>
-<p style="text-align: justify"><?php echo $model->indicacion; ?></p>          
+<strong>RECETA: </strong>
+<br><br>
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>ID Medicamento</th>
+            <th>Nombre del Medicamento</th>
+            <th>Cantidad</th>
+            <th>Indicaciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php
+    $medicamento = app\models\RecetaDetalle::find()->where(['id_cita' => $model->id_cita])->all();
+    $cont = count($medicamento);
+    
+    for ($i = 0; $i < $cont; $i++) {
+        $idMed = $medicamento[$i]['id_medicamento'];
+        $medi =  app\models\Medicamentos::find()->where(['id_medicamento'=>$idMed])->one();
+        ?>
+        <tr>
+            <th> <?php echo $medi->codigo_med ?></th>
+            <th> <?php echo $medi->nombre_med ?></th>
+            <th> <?php echo $medicamento[$i]['cantidad_med'] ?></th>
+            <th> <?php echo $medicamento[$i]['indicaciones'] ?></th>
+        </tr>
+
+<?php } ?>
+    </tbody>
+    <p style="text-align: justify">hola <?php echo $cont; ?></p> 
+</table>
+
+
 
 <br><br><br><br><br><br>
 <b><div ALIGN=center>Dr.</div></b>

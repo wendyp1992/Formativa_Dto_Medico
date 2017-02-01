@@ -68,12 +68,12 @@ class PacienteController extends Controller {
         if ($request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                'title' => "Paciente #" . $id,
+                'title' => "PACIENTE #" . $id,
                 'content' => $this->renderAjax('view', [
                     'model' => $this->findModel($id),
                 ]),
-                'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                Html::a('Editar', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+                'footer' => Html::button('<i class="glyphicon glyphicon-ban-circle"></i> Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                Html::a('<i class="glyphicon glyphicon-edit"></i> Editar', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
             ];
         } else {
             return $this->render('view', [
@@ -99,7 +99,7 @@ class PacienteController extends Controller {
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($request->isGet) {
                 return [
-                    'title' => "Crear Nuevo Paciente",
+                    'title' => "<b>CREAR NUEVO PACIENTE</b>",
                     'content' => $this->renderAjax('create', [
                         'model' => $model,
                         'modelP' => $modelP,
@@ -194,12 +194,12 @@ class PacienteController extends Controller {
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($request->isGet) {
                 return [
-                    'title' => "Actualizar Paciente #" . $id,
+                    'title' => "ACTUALIZAR PACIENTE #" . $id,
                     'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                    Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+                    'footer' => Html::button('<i class="glyphicon glyphicon-ban-circle"></i> Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('<i class="glyphicon glyphicon-floppy-disk"></i> Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
             } else if ($model->load($request->post()) && $model->save()) {
                 return [
@@ -208,8 +208,8 @@ class PacienteController extends Controller {
                     'content' => $this->renderAjax('view', [
                         'model' => $model,
                     ]),
-                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                    Html::a('Editar', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+                    'footer' => Html::button('<i class="glyphicon glyphicon-ban-circle"></i> Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::a('<i class="glyphicon glyphicon-edit"></i> Editar', ['update', 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
                 ];
             } else {
                 return [
@@ -217,8 +217,8 @@ class PacienteController extends Controller {
                     'content' => $this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer' => Html::button('Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                    Html::button('Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
+                    'footer' => Html::button('<i class="glyphicon glyphicon-ban-circle"></i> Cerrar', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('<i class="glyphicon glyphicon-floppy-disk"></i> Guardar', ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
             }
         } else {

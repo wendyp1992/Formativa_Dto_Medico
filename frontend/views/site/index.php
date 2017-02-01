@@ -1,19 +1,15 @@
 <?php
-
 /* @var $this yii\web\View */
 
-$this->title = 'Home';
+$this->title = 'SISTEMA MÉDICO';
 $relativeHomeUrl = yii\helpers\Url::base();
 ?>
 <div class="site-index">
-    <div class="jumbotron">
-        <br> <br><br><br><br>
-<IMG SRC=<?php echo $relativeHomeUrl ?>/images/logo.jpg>
-
-                <h1>DEPARTAMENTO hhollajasMÉDICO</h1>
-                <p>Vista Principal </p>
-                
-    </div>
-    <div class="body-content">
-    </div>
+    <img src="/DtoMedico/frontend/web/images/fondo.jpg" class="img-responsive" style="
+         z-index: -999;
+         width: 100%;
+         height: 100%;
+         position: fixed;
+         top: 0;
+         left: 0;">
 </div>

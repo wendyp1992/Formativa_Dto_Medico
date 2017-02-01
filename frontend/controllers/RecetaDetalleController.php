@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
+use kartik\mpdf\Pdf;
 
 /**
  * RecetaDetalleController implements the CRUD actions for RecetaDetalle model.
@@ -82,7 +83,7 @@ class RecetaDetalleController extends Controller {
         $id_cita = $_GET['id_cita'];
         $searchModel = new RecetaDetalleSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
+
         if ($request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($request->isGet) {
@@ -123,7 +124,7 @@ class RecetaDetalleController extends Controller {
              *   Process for non-ajax request
              */
             if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['create', 'id_cita' => $model->id_cita]);
+            return $this->redirect(['create', 'id_cita' => $model->id_cita, 'id_medicamento'=>$model->id_medicamento]);
             } else {
                 return $this->render('create', [
                             'model' => $model,
@@ -186,7 +187,7 @@ class RecetaDetalleController extends Controller {
              *   Process for non-ajax request
              */
             if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id_cita' => $model->id_cita, 'id_medicamento' => $model->id_medicamento]);
+                return $this->redirect(['view', 'id_cita' => $model->id_cita]);
             } else {
                 return $this->render('update', [
                             'model' => $model,
@@ -217,7 +218,7 @@ class RecetaDetalleController extends Controller {
             /*
              *   Process for non-ajax request
              */
-            return $this->redirect(['index']);
+            return $this->redirect(['/receta-detalle/create', 'id_cita'=>$id_cita]);
         }
     }
 
@@ -251,6 +252,22 @@ class RecetaDetalleController extends Controller {
         }
     }
 
+    public function actionReportes($id_cita) {
+        $pdf = new Pdf([
+            'mode' => Pdf::MODE_CORE, // leaner size using standard fonts
+            'content' => $this->renderPartial('receta_pdf', ['model' => $this->findModel1($id_cita)]),
+            'options' => [
+                'title' => 'Receta',
+                'subject' => 'Receta PUCESE'
+            ],
+            'methods' => [
+                'SetHeader' => ['Generado Por PUCESE||Fecha : ' . date("r")],
+                'SetFooter' => ['|Pagina {PAGENO}|'],
+            ]
+        ]);
+        return $pdf->render();
+    }
+
     /**
      * Finds the RecetaDetalle model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -259,6 +276,15 @@ class RecetaDetalleController extends Controller {
      * @return RecetaDetalle the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+    
+    protected function findModel1($id_cita) {
+        if (($model = RecetaDetalle::findOne(['id_cita' => $id_cita])) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+    
     protected function findModel($id_cita, $id_medicamento) {
         if (($model = RecetaDetalle::findOne(['id_cita' => $id_cita, 'id_medicamento' => $id_medicamento])) !== null) {
             return $model;

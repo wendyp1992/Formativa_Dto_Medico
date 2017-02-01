@@ -9,9 +9,11 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="historia-clinica-form">
-    <center><h2>HISTORIA CLÍNICA DEL PACIENTE</h2></center>
-    <?php $form = ActiveForm::begin(); ?>
     <div class="row">
+        <center><h2>HISTORIA CLÍNICA DEL PACIENTE</h2></center>
+        <hr>
+        <?php $form = ActiveForm::begin(); ?>
+
         <div class="col-md-4">
             <?= $form->field($model, 'id_paciente')->textInput(['readonly' => true, 'value' => $model->id_paciente]) ?>
         </div>
@@ -45,18 +47,25 @@ use yii\widgets\ActiveForm;
                 <?= $form->field($modelP, 'cedula')->textInput(['readonly' => true, 'value' => $dataProvider->allModels[0]['nacionalidad']])->label('Nacionalidad') ?>
             </div>
         <?php endif; ?>
+        <div class="col-md-12">
+            <h3>HÁBITOS</h3><hr>
+        </div>
+        <center>
+            <div class="col-md-4">
+                <?= $form->field($antecedentes, 'tabaco')->checkbox() ?>
+            </div>
+            <div class="col-md-4">
+                <?= $form->field($antecedentes, 'alcohol')->checkbox() ?>
+            </div>
+            <div class="col-md-4">
+                <?= $form->field($antecedentes, 'alimentacion')->checkbox() ?>
+            </div>
+        </center>
 
-        <center><h2>Hábitos</h2></center>
-        <div class="col-md-4">
-            <?= $form->field($antecedentes, 'tabaco')->checkbox() ?>
+
+        <div class="col-md-12">
+            <h3>ANTECEDENTES PERSONALES</h3><hr>
         </div>
-        <div class="col-md-4">
-            <?= $form->field($antecedentes, 'alcohol')->checkbox() ?>
-        </div>
-        <div class="col-md-4">
-            <?= $form->field($antecedentes, 'alimentacion')->checkbox() ?>
-        </div>
-        <br><center><h2>Antecedentes Personales</h2></center>
 
         <div class="col-md-4">
             <?= $form->field($model, 'tipo_sangre')->dropDownList(['A+' => 'A+', 'A-' => 'A-', 'B+' => 'B+', 'B-' => 'B-', 'AB+' => 'AB+', 'AB-' => 'AB-', 'O+' => 'O+', 'O-' => 'O-'], ['style' => 'width:300px']) ?>
@@ -78,28 +87,27 @@ use yii\widgets\ActiveForm;
         </div>
 
 
-        <br> <center><h2>Antecedentes Familiares</h2></center>
-        <div class="col-md-4">
-            <?= $form->field($antecedentes, 'familiar_tipo')->dropDownList(['Ninguna' => 'Ninguna', 'Papa' => 'Papá', 'mama' => 'mamá', 'Hermanos' => 'Hermanos', 'Abuelos' => 'Abuelos',], ['maxlength' => true, 'style' => 'width:300px']) ?>
+        <div class="col-md-12">
+            <h3>ANTECEDENTES FAMILIARES</h3><hr>
         </div>
-        <div class="col-md-4">
-            <?= $form->field($antecedentes, 'enfermedad_familiar')->dropDownList(['Ninguna' => 'Ninguna', 'Hipertension' => 'Hipertensión', 'Diabetes' => 'Diabetes', 'Cancer' => 'Cáncer', 'Tuberculosis' => 'Tuberculosis'], ['maxlength' => true, 'style' => 'width:300px']) ?>
+        <div class="col-md-6">
+            <?= $form->field($antecedentes, 'familiar_tipo')->dropDownList(['Ninguna' => 'Ninguna', 'Papa' => 'Papá', 'mama' => 'mamá', 'Hermanos' => 'Hermanos', 'Abuelos' => 'Abuelos',], ['maxlength' => true]) ?>
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($antecedentes, 'enfermedad_familiar')->dropDownList(['Ninguna' => 'Ninguna', 'Hipertension' => 'Hipertensión', 'Diabetes' => 'Diabetes', 'Cancer' => 'Cáncer', 'Tuberculosis' => 'Tuberculosis'], ['maxlength' => true]) ?>
         </div>
         <?= $form->field($antecedentes, 'id_paciente')->textInput(['type' => "hidden",])->label(" ") ?>
-    </div>
 
-    <div class="col-md-12">
+
         <?= $form->field($model, 'fecha_regHistoria')->textInput(['type' => "hidden", 'value' => date('Y-m-d H:i')])->label(" ") ?>
+
+        <?php if (!Yii::$app->request->isAjax) { ?>
+            <div class="row">
+                <center> <?= Html::submitButton($model->isNewRecord ? '<i class="glyphicon glyphicon-floppy-disk"></i> GUARDAR' : 'GUARDAR', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+                </center>
+            </div>
+        <?php } ?>
+
+        <?php ActiveForm::end(); ?>
     </div>
-
-
-    <?php if (!Yii::$app->request->isAjax) { ?>
-        <div class="row">
-            <center> <?= Html::submitButton($model->isNewRecord ? 'Guardar' : 'Guardar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-            </center>
-        </div>
-    <?php } ?>
-
-    <?php ActiveForm::end(); ?>
-
 </div>

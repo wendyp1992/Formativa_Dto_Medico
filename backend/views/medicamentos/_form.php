@@ -12,13 +12,13 @@ use yii\widgets\ActiveForm;
     <div class="row">
         <?php $form = ActiveForm::begin(); ?>
         <div class="col-md-4">
-            <?= $form->field($model, 'codigo_med')->textInput(['maxlength' => true, 'style' => 'width:125px']) ?>
+            <?= $form->field($model, 'codigo_med')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-4">
-            <?= $form->field($model, 'nombre_med')->textInput(['maxlength' => true, 'style' => 'width:150px']) ?></div>
+            <?= $form->field($model, 'nombre_med')->textInput(['maxlength' => true]) ?></div>
         <div class="col-md-4">
             <?=
-            $form->field($model, 'tipo_med')->dropDownList(['ANTIBIOTICOS' => 'ANTIBIOTICOS', 'AMINOGLUCOSIDOS' => 'AMINOGLUCOSIDOS', 'ANESTESICOS' => 'ANESTESICOS'], ['maxlength' => true, 'style' => 'width:150px'])
+            $form->field($model, 'tipo_med')->dropDownList(['ANTIBIOTICOS' => 'ANTIBIOTICOS', 'AMINOGLUCOSIDOS' => 'AMINOGLUCOSIDOS', 'ANESTESICOS' => 'ANESTESICOS'], ['maxlength' => true])
             ?></div>
         <div class="col-md-4">
             <?=
@@ -34,11 +34,11 @@ use yii\widgets\ActiveForm;
             ])
             ?>
 
-            <?= $form->field($model, 'cantidad_med')->textInput(['style' => 'width:150px']) ?></div>
+            <?= $form->field($model, 'cantidad_med')->textInput() ?></div>
         <div class="col">
         </div>
-        <div class="col-md-4">
-            <?= $form->field($model, 'descripcion')->textarea(['rows' => 6, 'style' => 'width:300px']) ?></div>
+        <div class="col-md-8">
+            <?= $form->field($model, 'descripcion')->textarea(['rows' => 6]) ?></div>
         <?= $form->field($model, 'fecha_regMedic')->textInput(['type' => "hidden", 'value' => date('Y-m-d h:m:s')])->label('') ?>
 
     </div> 

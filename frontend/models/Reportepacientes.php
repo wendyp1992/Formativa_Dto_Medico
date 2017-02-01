@@ -40,11 +40,11 @@ class Reportepacientes extends \yii\db\ActiveRecord {
      */
     public function attributeLabels() {
         return [
-            'idreporte' => 'Idreporte',
-            'fechainicio' => 'Fecha Inicio',
-            'fechafin' => 'Fecha Fin',
-            'fechaRegistro' => 'Fecha Registro',
-            'reporte' => 'Reporte',
+            'idreporte' => 'Id Reporte',
+            'fechainicio' => 'Fecha de Inicio',
+            'fechafin' => 'Fecha de Fin',
+            'fechaRegistro' => 'Fecha de Registro',
+            'reporte' => 'Dirección del Reporte',
         ];
     }
 

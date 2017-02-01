@@ -5,9 +5,9 @@ use app\models\Paciente;
 use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\ExamenHistoriaClinica */
-use kartik\mpdf\Pdf;
-echo Html::a('<i class="fa glyphicon glyphicon-hand-up"></i> Imprimir Examen', ['report', 'id'=>$_GET['id']], [
-    'class'=>'btn btn-danger', 
+
+echo Html::a('<i class="glyphicon glyphicon-print"></i> Imprimir Examen', ['report', 'id'=>$_GET['id']], [
+    'class'=>'btn pull-right', 
     'target'=>'_blank', 
     'data-toggle'=>'tooltip', 
     'title'=>'Imprimir Examen'

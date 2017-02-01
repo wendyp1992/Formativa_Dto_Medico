@@ -5,7 +5,6 @@
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
-use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
 
@@ -27,21 +26,21 @@ AppAsset::register($this);
         <div class="wrap">
             <?php
             NavBar::begin([
-                'brandLabel' => 'App',
+                'brandLabel' => 'SISTEMA MÉDICO',
                 'brandUrl' => Yii::$app->homeUrl,
                 'options' => [
-                    'class' => 'navbar-inverse navbar-fixed-top',
+                    'class' => 'navbar-blue navbar-fixed-top',
                 ],
             ]);
             $menuItems = [
-                ['label' => 'Principal', 'url' => ['/site/index']],
+                    ['label' => 'INICIO', 'url' => ['/site/index']],
             ];
             if (Yii::$app->user->isGuest) {
                 //$menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
                 $menuItems[] = ['label' => 'Entrar', 'url' => ['/user/security/login']];
             } else {
                 $menuItems[] = [
-                    'label' => 'Administración',
+                    'label' => 'ADMINISTRACIÓN',
                     'items' => [
                         [
                             'label' => 'Historia Clínica Paciente',
@@ -55,6 +54,7 @@ AppAsset::register($this);
                             'label' => 'Hoja Evolución',
                             'url' => ['/cita-medica/create'],
                         ],
+                        '<li class="divider"></li>',
                         [
                             'label' => 'Emisión de Exámenes',
                             'url' => ['/examen-historia-clinica'],
@@ -70,7 +70,7 @@ AppAsset::register($this);
                     ],
                 ];
                 $menuItems[] = [
-                    'label' => 'Reportes',
+                    'label' => 'REPORTES',
                     'items' => [
 //                        [
 //                            'label' => 'Medicamentos en Stock',
@@ -81,7 +81,7 @@ AppAsset::register($this);
 //                            'url' => ['/'],
 //                        ],
                         [
-                            'label' => 'Pacientes atendidos',
+                            'label' => 'Pacientes Atendidos',
                             //clasificar por estudiantes, trabajadores y dependientes y brindarlo por servicio despues
                             'url' => ['/reportepacientes'],
                         ],
@@ -102,6 +102,7 @@ AppAsset::register($this);
                             'label' => 'Ir a Escritorio',
                             'url' => ['/../../backend/web'],
                         ],
+                        '<li class="divider"></li>',
                         [
                             'label' => 'Salir del Sistema',
                             'url' => ['/user/security/logout'],
@@ -117,22 +118,22 @@ AppAsset::register($this);
             NavBar::end();
             ?>
 
-            <div class="container">
-                <?=
-                Breadcrumbs::widget([
-                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-                ])
-                ?>
+            <div class="container" >
                 <?= Alert::widget() ?>
                 <?= $content ?>
             </div>
-        </div>
+        </div>        
 
-        <footer class="footer">
+        <footer class="section-primary">
             <div class="container">
-                <p class="pull-left">&copy; PUCESE <?= date('Y') ?></p>
-
-                <!--p class="pull-right">< ?= Yii::powered() ?></p-->
+                <div class="row">
+                    <div class="col-md-5">
+                        <img src="/DtoMedico/frontend/web/images/logo-puce.png" class="img-responsive pull-right" style="width: 50px">
+                    </div>
+                    <div class="col-md-7" style="padding: 10px;">
+                        PONTIFICIA UNIVERSIDAD CATÓLICA DEL ECUADOR<br>SEDE ESMERALDAS
+                    </div>
+                </div>
             </div>
         </footer>
 

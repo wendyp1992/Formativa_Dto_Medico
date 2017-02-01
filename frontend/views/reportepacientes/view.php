@@ -7,8 +7,8 @@ use yii\helpers\Html;
 /* @var $model app\models\Reportepacientes */
 use kartik\mpdf\Pdf;
 
-echo Html::a('<i class="fa glyphicon glyphicon-hand-up"></i> Imprimir Reporte', ['vista', 'id' => $_GET['id']], [
-    'class' => 'btn btn-danger',
+echo Html::a('<i class="glyphicon glyphicon-print"></i> Imprimir Reporte', ['vista', 'id' => $_GET['id']], [
+    'class' => 'btn pull-right',
     'target' => '_blank',
     'data-toggle' => 'tooltip',
     'title' => 'Imprimir Reporte'

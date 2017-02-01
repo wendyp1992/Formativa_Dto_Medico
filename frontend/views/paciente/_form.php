@@ -10,32 +10,37 @@ use kartik\select2\Select2;
 ?>
 
 <div class="paciente-form">
+    <div class="row">
+        <?php $form = ActiveForm::begin(); ?>
+        <div class="col-md-12">
+            <?=
+            $form->field($model, 'tipo_paciente')->widget(Select2::className(), [
+                'data' => ['Estudiante' => 'Estudiante', 'Trabajador' => 'Trabajador'],
+                'options' => [ 'placeholder' => 'Elegir una opción', 'id' => 'opcion', 'style' => 'width:300px'],
+                'size' => Select2::MEDIUM,
+                'pluginOptions' => [
+                    'allowClear' => true,
+                ],])
+            ?> 
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'cedula')->textInput([ 'maxlength' => true, 'readonly' => true, 'id' => 'cedula']) ?> <!--    ['disabled' => ($model->tipo_paciente=='estudiantes') ? 'disabled' : false]-->
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'num_matricula')->textInput([ 'maxlength' => true, 'id' => 'matricula', 'readonly' => true]) ?>
+        </div>
 
-    <?php $form = ActiveForm::begin(); ?>
-    <div class="col-md-12">
-        <?=
-                $form->field($model, 'tipo_paciente')->
-                widget(Select2::className(), [
-                    'data' => ['Estudiante' => 'Estudiante', 'Trabajador' => 'Trabajador'],
-                    'options' => ['placeholder' => 'Elegir una opción', 'id' => 'opcion', 'style' => 'width:300px'],
-                    'size' => Select2::MEDIUM,
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                    ],])
-        ?>
+        <?= $form->field($model, 'fecha_regPaciente')->textInput([ 'type' => "hidden", 'value' => date('Y-m-d H:i')])->label(" ") ?>
+
+
+            <div class="form-group col-md-12">
+                <center> <?= Html::submitButton($model->isNewRecord ? '<i class="glyphicon glyphicon-search"></i> BUSCAR' : 'BUSCAR', ['class' => $model->isNewRecord ? 'btn btn-primary pull-right' : 'btn btn-primary']) ?>
+                </center>
+            </div>
+
+
+        <?php ActiveForm::end(); ?>
     </div>
-    <div class="col-md-6">
-        <?= $form->field($model, 'cedula')->textInput(['maxlength' => true, 'readonly' => true, 'id' => 'cedula']) ?> <!--    ['disabled' => ($model->tipo_paciente=='estudiantes') ? 'disabled' : false]-->
-    </div>
-    <div class="col-md-6">
-        <?= $form->field($model, 'num_matricula')->textInput(['maxlength' => true, 'id' => 'matricula', 'readonly' => true]) ?>
-    </div>
-    <?= $form->field($model, 'fecha_regPaciente')->textInput(['type' => "hidden", 'value' => date('Y-m-d H:i')])->label(" ") ?>
-    
-    <div class="form-group col-md-12">
-        <?= Html::submitButton($model->isNewRecord ? 'Buscar' : 'Buscar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-    </div>
-    <?php ActiveForm::end(); ?>
 </div>
 
 

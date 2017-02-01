@@ -38,7 +38,7 @@ $modelo->save();
         <thead>
             <tr>
                 <th>Id Paciente</th>
-                <th>Cedula</td>
+                <th>Cedula</th>
                 <th>Tipo Paciente</th>
                 <th>Nombres</th>
                 <th>Apellidos</th>

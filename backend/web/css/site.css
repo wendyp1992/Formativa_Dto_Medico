@@ -109,3 +109,123 @@ a.desc:after {
 .nav > li > form > button:hover {
     text-decoration: none;
 }
+
+.navbar-blue {
+    background-color: #337cbb;
+    border-color: #2c6ba1;
+}
+.navbar-blue .navbar-brand {
+    color: #ffffff;
+}
+.navbar-blue .navbar-brand:hover,
+.navbar-blue .navbar-brand:focus {
+    color: #e6e6e6;
+    background-color: transparent;
+}
+.navbar-blue .navbar-text {
+    color: #ffffff;
+}
+.navbar-blue .navbar-nav > li > a {
+    color: #ffffff;
+}
+.navbar-blue .navbar-nav > li > a:hover,
+.navbar-blue .navbar-nav > li > a:focus {
+    color: #ffffff;
+    background-color: transparent;
+}
+.navbar-blue .navbar-nav > .active > a,
+.navbar-blue .navbar-nav > .active > a:hover,
+.navbar-blue .navbar-nav > .active > a:focus {
+    color: #ffffff;
+    background-color: #2c6ba1;
+}
+.navbar-blue .navbar-nav > .disabled > a,
+.navbar-blue .navbar-nav > .disabled > a:hover,
+.navbar-blue .navbar-nav > .disabled > a:focus {
+    color: #cccccc;
+    background-color: transparent;
+}
+.navbar-blue .navbar-toggle {
+    border-color: #dddddd;
+}
+.navbar-blue .navbar-toggle:hover,
+.navbar-blue .navbar-toggle:focus {
+    background-color: #dddddd;
+}
+.navbar-blue .navbar-toggle .icon-bar {
+    background-color: #888888;
+}
+.navbar-blue .navbar-collapse,
+.navbar-blue .navbar-form {
+    border-color: #2c6ba1;
+}
+.navbar-blue .navbar-nav > .open > a,
+.navbar-blue .navbar-nav > .open > a:hover,
+.navbar-blue .navbar-nav > .open > a:focus {
+    background-color: #2c6ba1;
+    color: #ffffff;
+}
+@media (max-width: 767px) {
+    .navbar-blue .navbar-nav .open .dropdown-menu > li > a {
+        color: #ffffff;
+    }
+    .navbar-blue .navbar-nav .open .dropdown-menu > li > a:hover,
+    .navbar-blue .navbar-nav .open .dropdown-menu > li > a:focus {
+        color: #ffffff;
+        background-color: transparent;
+    }
+    .navbar-blue .navbar-nav .open .dropdown-menu > .active > a,
+    .navbar-blue .navbar-nav .open .dropdown-menu > .active > a:hover,
+    .navbar-blue .navbar-nav .open .dropdown-menu > .active > a:focus {
+        color: #ffffff;
+        background-color: #2c6ba1;
+    }
+    .navbar-blue .navbar-nav .open .dropdown-menu > .disabled > a,
+    .navbar-blue .navbar-nav .open .dropdown-menu > .disabled > a:hover,
+    .navbar-blue .navbar-nav .open .dropdown-menu > .disabled > a:focus {
+        color: #cccccc;
+        background-color: transparent;
+    }
+}
+.navbar-blue .navbar-link {
+    color: #ffffff;
+}
+.navbar-blue .navbar-link:hover {
+    color: #ffffff;
+}
+.navbar-blue .btn-link {
+    color: #ffffff;
+}
+.navbar-blue .btn-link:hover,
+.navbar-blue .btn-link:focus {
+    color: #ffffff;
+}
+.navbar-blue .btn-link[disabled]:hover,
+fieldset[disabled] .navbar-blue .btn-link:hover,
+.navbar-blue .btn-link[disabled]:focus,
+fieldset[disabled] .navbar-blue .btn-link:focus {
+    color: #cccccc;
+}
+
+.section-primary {
+    background-color: #337cbb !important;
+    color: #ffffff;
+}
+.section-primary .background-image {
+    opacity: 0.5;
+}
+
+.wrap {
+    min-height: 100%;
+    height: auto;
+    margin: 0 auto -60px;
+    padding: 0 0 60px;
+}
+
+.fondo {
+    background: url("/DtoMedico/frontend/web/images/fondo.jpg") no-repeat center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}

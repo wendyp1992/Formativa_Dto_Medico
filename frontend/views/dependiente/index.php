@@ -17,6 +17,9 @@ CrudAsset::register($this);
 
 ?>
 <div class="dependiente-index">
+    
+    <center><h2><b>LISTA DE PACIENTES DEPENDIENTES</b></h2></center><br>
+    
     <div id="ajaxCrudDatatable">
         <?=GridView::widget([
             'id'=>'crud-datatable',
@@ -27,11 +30,9 @@ CrudAsset::register($this);
             'toolbar'=> [
                 ['content'=>
                     Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'],
-                    ['role'=>'modal-remote','title'=> 'Crear nuevo Dependientes','class'=>'btn btn-default']).
+                    ['role'=>'modal-remote','title'=> 'Crear Dependientes','class'=>'btn btn-default']).
                     Html::a('<i class="glyphicon glyphicon-repeat"></i>', [''],
-                    ['data-pjax'=>1, 'class'=>'btn btn-default', 'title'=>'Actualizar Tabla']).
-                    '{toggleData}'.
-                    '{export}'
+                    ['data-pjax'=>1, 'class'=>'btn btn-default', 'title'=>'Actualizar'])
                 ],
             ],          
             'striped' => true,
@@ -40,21 +41,7 @@ CrudAsset::register($this);
             'panel' => [
                 'type' => 'primary', 
                 'heading' => '<i class="glyphicon glyphicon-list"></i> Lista de Pacientes Dependientes',
-                'before'=>'<em>* Cambiar el tamaño de las columnas de la tabla como una hoja de cálculo arrastrando los bordes de la columna.</em>',
-                'after'=>BulkButtonWidget::widget([
-                            'buttons'=>Html::a('<i class="glyphicon glyphicon-trash"></i>&nbsp; Eliminar todo',
-                                ["bulk-delete"] ,
-                                [
-                                    "class"=>"btn btn-danger btn-xs",
-                                    'role'=>'modal-remote-bulk',
-                                    'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
-                                    'data-request-method'=>'post',
-                                    'data-confirm-title'=>'¿Estás Seguro?',
-                                    'data-confirm-message'=>'¿Seguro que quieres eliminar este elemento?'
-                                ]),
-                        ]).                        
-                        '<div class="clearfix"></div>',
-            ]
+                ]
         ])?>
     </div>
 </div>
